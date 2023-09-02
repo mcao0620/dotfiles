@@ -19,6 +19,19 @@ augroup vimrcEx
   autocmd FileType text setlocal textwidth=78
 augroup END
 
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
+
+" reset the cursor on start (for older versions of vim, usually not required)
+augroup myCmds
+au!
+autocmd VimEnter * silent !echo -ne "\e[2 q"
+augroup END
+
+set ttimeout
+set ttimeoutlen=1
+set ttyfast
+
 " Add optional packages.
 "
 " The matchit plugin makes the % command work better, but it is not backwards
