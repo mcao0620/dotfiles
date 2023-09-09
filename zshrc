@@ -5,24 +5,9 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export PATH="$PATH:/Users/michaelcao/nvim-macos/bin"
-# export PATH="$PATH:/Users/michaelcao/Developer/flutter/bin"
-# export PATH="${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}"
+export PATH="$PATH:/Users/michael/tools/nvim-macos/bin"
+
 eval "$(pyenv init -)"
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/michaelcao/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/michaelcao/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/michaelcao/opt/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/michaelcao/opt/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="/usr/local/opt/ruby/bin:$PATH"
@@ -34,12 +19,15 @@ if [ -f '/Users/michaelcao/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/mich
 if [ -f '/Users/michaelcao/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/michaelcao/google-cloud-sdk/completion.zsh.inc'; fi
 
 export PATH="/Users/michaelcao/.local/bin:$PATH"
+
+# Add Arcanist to path
 export PATH="$PATH:/Users/michaelcao/arcanist/bin/"
+# nvm setup
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
-
-source /Users/michaelcao/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# zsh syntax highlighting
+source /Users/michael/tools/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Enable vi mode
 bindkey -v
@@ -65,6 +53,7 @@ zle-line-init() {
 zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
+
 
 source ~/powerlevel10k/powerlevel10k.zsh-theme
 
