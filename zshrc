@@ -39,7 +39,7 @@ source $(brew --prefix nvm)/nvm.sh
 source /Users/michael/tools/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
 # zsh autocomplete
-source /Users/michael/tools/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+# source /Users/michael/tools/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 # zsh autosuggestions
 source /Users/michael/tools/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
@@ -53,16 +53,17 @@ source ~/tools/powerlevel10k/powerlevel10k.zsh-theme
 #        Aliases
 # ------------------------------------
 
-alias gt='git clone'
 alias gs='git status'
-alias gm='git commit -m'
-alias gc='git clean'
+alias gcl='git clone'
+alias gcom='git commit -m'
+alias gcam='git commit -am'
+alias gch='git checkout'
 alias gr='git restore'
 alias ga='git add .'
 alias gp='git push'
-alias gam='git commit -am'
 alias gre='git rebase'
 alias gau='git add -u'
+
 alias home='cd ~'
 alias vim='nvim'
 
@@ -98,6 +99,8 @@ preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 # ------------------------------------
 #        Additional Config
 # ------------------------------------
+
+bindkey -r '\e\[3~'
 
 # export nvm_dir="$home/.nvm"
 #   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # this loads nvm
