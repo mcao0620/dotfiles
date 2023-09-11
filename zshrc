@@ -65,6 +65,7 @@ alias gre='git rebase'
 alias gau='git add -u'
 
 alias home='cd ~'
+alias config='cd ~/dev/dotfiles'
 alias vim='nvim'
 
 # ------------------------------------
