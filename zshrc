@@ -1,3 +1,11 @@
+# ====================================
+#    Michael Cao's .zshrc config
+# ====================================
+
+# ------------------------------------
+#        Instant Prompt
+# ------------------------------------
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -5,41 +13,66 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-export PATH="$PATH:/Users/michaelcao/nvim-macos/bin"
-# export PATH="$PATH:/Users/michaelcao/Developer/flutter/bin"
-# export PATH="${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}"
+# ------------------------------------
+#       Exports, Sources, Setup 
+# ------------------------------------
+
+# pyenv setup
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv >/dev/null || export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init -)"
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/michaelcao/opt/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/Users/michaelcao/opt/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/michaelcao/opt/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/Users/michaelcao/opt/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
 
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="/usr/local/opt/ruby/bin:$PATH"
+# Add sqlite to path
+export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/michaelcao/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/michaelcao/google-cloud-sdk/path.zsh.inc'; fi
+# Fix brew doctor warning for pyenv
+alias brew='env PATH="${PATH//$(pyenv root)\/shims:/}" brew'
 
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/michaelcao/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/michaelcao/google-cloud-sdk/completion.zsh.inc'; fi
+# Add Arcanist to path
+# export PATH="$PATH:/Users/michaelcao/arcanist/bin/"
 
-export PATH="/Users/michaelcao/.local/bin:$PATH"
-export PATH="$PATH:/Users/michaelcao/arcanist/bin/"
+# nvm setup
 export NVM_DIR=~/.nvm
 source $(brew --prefix nvm)/nvm.sh
 
+# zsh syntax highlighting
+source /Users/michael/tools/fast-syntax-highlighting/fast-syntax-highlighting.plugin.zsh
 
-source /Users/michaelcao/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+# zsh autocomplete
+# source /Users/michael/tools/zsh-autocomplete/zsh-autocomplete.plugin.zsh
+
+# zsh autosuggestions
+source /Users/michael/tools/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh
+
+# powerlevel10k setup
+source ~/tools/powerlevel10k/powerlevel10k.zsh-theme
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# ------------------------------------
+#        Aliases
+# ------------------------------------
+
+alias gs='git status'
+alias gcl='git clone'
+alias gcom='git commit -m'
+alias gcam='git commit -am'
+alias gch='git checkout'
+alias gr='git restore'
+alias ga='git add'
+alias gp='git push'
+alias gpul='git pull'
+alias gre='git rebase'
+alias gau='git add -u'
+alias gf='git fetch'
+
+alias home='cd ~'
+alias config='cd ~/dev/dotfiles'
+alias vim='nvim'
+
+# ------------------------------------
+#        zsh Vim mode
+# ------------------------------------
 
 # Enable vi mode
 bindkey -v
@@ -66,22 +99,23 @@ zle -N zle-line-init
 echo -ne '\e[5 q' # Use beam shape cursor on startup.
 preexec() { echo -ne '\e[5 q' ;} # Use beam shape cursor for each new prompt.
 
-source ~/powerlevel10k/powerlevel10k.zsh-theme
+# ------------------------------------
+#        Additional Config
+# ------------------------------------
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+bindkey -r '\e\[3~'
 
-# Aliases
-alias gt='git clone'
-alias gs='git status'
-alias gm='git commit -m'
-alias gc='git clean'
-alias gr='git restore'
-alias ga='git add .'
-alias gp='git push'
-alias gam='git commit -am'
-alias gre='git rebase'
-alias gau='git add -u'
-alias home='cd ~'
-alias vim='nvim'
+# export nvm_dir="$home/.nvm"
+#   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # this loads nvm
+#   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # this loads nvm bash_completion
+
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+# export PATH="/usr/local/opt/ruby/bin:$PATH"
+
+# The next line updates PATH for the Google Cloud SDK.
+# if [ -f '/Users/michaelcao/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/michaelcao/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+# if [ -f '/Users/michaelcao/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/michaelcao/google-cloud-sdk/completion.zsh.inc'; fi
 
