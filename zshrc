@@ -53,6 +53,7 @@ source ~/tools/powerlevel10k/powerlevel10k.zsh-theme
 #        Aliases
 # ------------------------------------
 
+alias c='clear'
 alias gs='git status'
 alias gcl='git clone'
 alias gcom='git commit -m'
