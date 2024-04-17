@@ -9,9 +9,7 @@
     "editor.minimap.enabled": false,
     "breadcrumbs.enabled": false,
     "update.showReleaseNotes": false,
-    "workbench.activityBar.visible": false,
     "zenMode.hideLineNumbers": false,
-    "zenMode.hideTabs": false,
     "editor.lineNumbers": "relative",
     "vim.leader": "<Space>",
     "vim.hlsearch": true,
@@ -219,6 +217,12 @@
                 "editor.action.commentLine"
             ]
         }
+    ],
+    "workbench.activityBar.location": "hidden",
+    "cursor.cpp.disabledLanguages": [
+        "plaintext",
+        "markdown",
+        "scminput"
     ],
     // "[typescriptreact]": {
     //   "editor.defaultFormatter": "esbenp.prettier-vscode"
