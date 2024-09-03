@@ -2,6 +2,12 @@
     "editor.formatOnSave": true,
     "editor.suggest.insertMode": "replace",
     "editor.linkedEditing": true,
+    "editor.cursorSurroundingLines": 8,
+    "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
+    "vim.highlightedyank.enable": true,
+    "vim.highlightedyank.color": "#a9dc7660",
+    "vim.highlightedyank.duration": 250,
+    "vim.useSystemClipboard": true,
     "javascript.updateImportsOnFileMove.enabled": "always",
     "launch": {},
     "[json]": {},
@@ -13,6 +19,112 @@
     "editor.lineNumbers": "relative",
     "vim.leader": "<Space>",
     "vim.hlsearch": true,
+    "vim.normalModeKeyBindings": [
+        {
+            "before": [
+                "leader",
+                "p"
+            ],
+            "commands": [
+                "editor.action.formatDocument"
+            ]
+        },
+        // LSP KEYBINDINGS
+        {
+            "before": [
+                "g",
+                "h"
+            ],
+            "commands": [
+                "editor.action.showDefinitionPreviewHover"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "p",
+                "d"
+            ],
+            "commands": [
+                "editor.action.peekDefinition"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "h"
+            ],
+            "commands": [
+                "editor.action.showDefinitionPreviewHover"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "i"
+            ],
+            "commands": [
+                "editor.action.goToImplementation"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "p",
+                "i"
+            ],
+            "commands": [
+                "editor.action.peekImplementation"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "q"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "r"
+            ],
+            "commands": [
+                "editor.action.referenceSearch.trigger"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "t"
+            ],
+            "commands": [
+                "editor.action.goToTypeDefinition"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "p",
+                "t"
+            ],
+            "commands": [
+                "editor.action.peekTypeDefinition"
+            ]
+        },
+        // Workbench
+        {
+            "before": [
+                "<leader>",
+                "e"
+            ],
+            "commands": [
+                "workbench.view.explorer"
+            ],
+        },
+    ],
     "vim.normalModeKeyBindingsNonRecursive": [
         // NAVIGATION
         // switch b/w buffers
@@ -153,24 +265,6 @@
                 "workbench.action.quickOpen"
             ]
         },
-        {
-            "before": [
-                "leader",
-                "p"
-            ],
-            "commands": [
-                "editor.action.formatDocument"
-            ]
-        },
-        {
-            "before": [
-                "g",
-                "h"
-            ],
-            "commands": [
-                "editor.action.showDefinitionPreviewHover"
-            ]
-        }
     ],
     "vim.visualModeKeyBindings": [
         // Stay in visual mode while indenting
@@ -224,6 +318,8 @@
         "markdown",
         "scminput"
     ],
+    "editor.accessibilitySupport": "off",
+    "github.copilot.editor.enableAutoCompletions": true,
     // "[typescriptreact]": {
     //   "editor.defaultFormatter": "esbenp.prettier-vscode"
     // },
