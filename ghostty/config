@@ -1,0 +1,7 @@
+theme = "/Users/michael/dev/dotfiles/ghostty/tokyonight_moon"
+macos-titlebar-style = "tabs"
+font-size = 14
+font-thicken = true
+adjust-cell-width = -2%
+adjust-cell-height = +5%
+# background=000000

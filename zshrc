@@ -53,7 +53,7 @@ source ~/tools/powerlevel10k/powerlevel10k.zsh-theme
 #        Aliases
 # ------------------------------------
 
-alias c='clear'
+alias cc='clear'
 alias gs='git status'
 alias gcl='git clone'
 alias gcom='git commit -m'
@@ -70,6 +70,7 @@ alias gf='git fetch'
 alias home='cd ~'
 alias config='cd ~/dev/dotfiles'
 alias vim='nvim'
+alias v='nvim'
 
 # ------------------------------------
 #        zsh Vim mode
