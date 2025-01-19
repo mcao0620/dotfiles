@@ -11,7 +11,6 @@
     "javascript.updateImportsOnFileMove.enabled": "always",
     "launch": {},
     "[json]": {},
-    "workbench.statusBar.visible": false,
     "editor.minimap.enabled": false,
     "breadcrumbs.enabled": false,
     "update.showReleaseNotes": false,
@@ -320,6 +319,10 @@
     ],
     "editor.accessibilitySupport": "off",
     "github.copilot.editor.enableAutoCompletions": true,
+    "extensions.experimental.affinity": {
+        "asvetliakov.vscode-neovim": 1
+    },
+    "editor.smoothScrolling": true,
     // "[typescriptreact]": {
     //   "editor.defaultFormatter": "esbenp.prettier-vscode"
     // },
