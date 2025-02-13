@@ -6,7 +6,7 @@ return {
         settings = {
           gopls = {
             env = {
-              GOPACKAGESDRIVER = "/Users/michaelcao/workspace/scio/tools/gopackagesdriver.sh",
+              GOPACKAGESDRIVER = vim.fn.fnamemodify("./tools/gopackagesdriver.sh", ":p"),
             },
             hints = {
               assignVariableTypes = false,
@@ -23,6 +23,35 @@ return {
               "-bazel-testlogs",
               "-bazel-LOMP",
             },
+          },
+        },
+      },
+      vtsls = {
+        settings = {
+          typescript = {
+            inlayHints = {
+              enumMemberValues = { enabled = false },
+              functionLikeReturnTypes = { enabled = false },
+              parameterNames = { enabled = "literals" },
+              parameterTypes = { enabled = false },
+              propertyDeclarationTypes = { enabled = false },
+              variableTypes = { enabled = false },
+            },
+          },
+        },
+      },
+      yamlls = {
+        settings = {
+          yaml = {
+            format = {
+              enable = false,
+              -- printWidth = 120,
+              -- proseWrap = "always",
+              -- singleQuote = true,
+            },
+            -- schemas = {
+            --   ["https://spec.openapis.org/oas/3.0/schema/2021-09-28"] = "openapi/**/*.yaml",
+            -- },
           },
         },
       },
