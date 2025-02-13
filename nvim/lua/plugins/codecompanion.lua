@@ -52,6 +52,17 @@ return {
       inline = {
         adapter = "copilot",
       },
+      adapters = {
+        copilot = function()
+          return require("codecompanion.adapters").extend("copilot", {
+            schema = {
+              model = {
+                default = "claude-3.5-sonnet",
+              },
+            },
+          })
+        end,
+      },
       log_level = "DEBUG",
     },
     keys = {
@@ -74,6 +85,14 @@ return {
       {
         "<leader>ad",
         "<cmd>CodeCompanionChat Add<cr>",
+        mode = "v",
+        noremap = true,
+        silent = true,
+        desc = "CodeCompanion add to chat",
+      },
+      {
+        "<leader>ai",
+        "<cmd>CodeCompanionActions<cr>in",
         mode = "v",
         noremap = true,
         silent = true,
