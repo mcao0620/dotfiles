@@ -19,6 +19,7 @@ return {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
       { "MeanderingProgrammer/render-markdown.nvim", ft = { "markdown", "codecompanion" } },
+      "j-hui/fidget.nvim",
     },
     opts = {
       strategies = {
@@ -97,6 +98,24 @@ return {
         noremap = true,
         silent = true,
         desc = "CodeCompanion add to chat",
+      },
+    },
+    init = function()
+      require("plugins.codecompanion.fidget-spinner"):init()
+    end,
+  },
+  {
+    "saghen/blink.cmp",
+    opts = {
+      sources = {
+        default = { "codecompanion" },
+        providers = {
+          codecompanion = {
+            name = "CodeCompanion",
+            module = "codecompanion.providers.completion.blink",
+            enabled = true,
+          },
+        },
       },
     },
   },
