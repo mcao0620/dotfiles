@@ -1,0 +1,333 @@
+{
+    "editor.formatOnSave": true,
+    "editor.suggest.insertMode": "replace",
+    "editor.linkedEditing": true,
+    "editor.cursorSurroundingLines": 8,
+    "editor.wordSeparators": "`~!@#$%^&*()=+[{]}\\|;:'\",.<>/?",
+    "vim.highlightedyank.enable": true,
+    "vim.highlightedyank.color": "#a9dc7660",
+    "vim.highlightedyank.duration": 250,
+    "vim.useSystemClipboard": true,
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "launch": {},
+    "[json]": {},
+    "workbench.statusBar.visible": false,
+    "editor.minimap.enabled": false,
+    "breadcrumbs.enabled": false,
+    "update.showReleaseNotes": false,
+    "zenMode.hideLineNumbers": false,
+    "editor.lineNumbers": "relative",
+    "vim.leader": "<Space>",
+    "vim.hlsearch": true,
+    "vim.normalModeKeyBindings": [
+        {
+            "before": [
+                "leader",
+                "p"
+            ],
+            "commands": [
+                "editor.action.formatDocument"
+            ]
+        },
+        // LSP KEYBINDINGS
+        {
+            "before": [
+                "g",
+                "h"
+            ],
+            "commands": [
+                "editor.action.showDefinitionPreviewHover"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "p",
+                "d"
+            ],
+            "commands": [
+                "editor.action.peekDefinition"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "h"
+            ],
+            "commands": [
+                "editor.action.showDefinitionPreviewHover"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "i"
+            ],
+            "commands": [
+                "editor.action.goToImplementation"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "p",
+                "i"
+            ],
+            "commands": [
+                "editor.action.peekImplementation"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "q"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "r"
+            ],
+            "commands": [
+                "editor.action.referenceSearch.trigger"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "t"
+            ],
+            "commands": [
+                "editor.action.goToTypeDefinition"
+            ]
+        },
+        {
+            "before": [
+                "g",
+                "p",
+                "t"
+            ],
+            "commands": [
+                "editor.action.peekTypeDefinition"
+            ]
+        },
+        // Workbench
+        {
+            "before": [
+                "<leader>",
+                "e"
+            ],
+            "commands": [
+                "workbench.view.explorer"
+            ],
+        },
+    ],
+    "vim.normalModeKeyBindingsNonRecursive": [
+        // NAVIGATION
+        // switch b/w buffers
+        {
+            "before": [
+                "<S-h>"
+            ],
+            "commands": [
+                ":bprevious"
+            ]
+        },
+        {
+            "before": [
+                "<S-l>"
+            ],
+            "commands": [
+                ":bnext"
+            ]
+        },
+        // splits
+        {
+            "before": [
+                "leader",
+                "v"
+            ],
+            "commands": [
+                ":vsplit"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "b"
+            ],
+            "commands": [
+                ":split"
+            ]
+        },
+        // panes
+        {
+            "before": [
+                "leader",
+                "h"
+            ],
+            "commands": [
+                "workbench.action.focusLeftGroup"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "j"
+            ],
+            "commands": [
+                "workbench.action.focusBelowGroup"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "k"
+            ],
+            "commands": [
+                "workbench.action.focusAboveGroup"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "l"
+            ],
+            "commands": [
+                "workbench.action.focusRightGroup"
+            ]
+        },
+        // NICE TO HAVE
+        {
+            "before": [
+                "leader",
+                "w"
+            ],
+            "commands": [
+                ":w!"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "q"
+            ],
+            "commands": [
+                ":q!"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "x"
+            ],
+            "commands": [
+                ":x!"
+            ]
+        },
+        {
+            "before": [
+                "[",
+                "d"
+            ],
+            "commands": [
+                "editor.action.marker.prev"
+            ]
+        },
+        {
+            "before": [
+                "]",
+                "d"
+            ],
+            "commands": [
+                "editor.action.marker.next"
+            ]
+        },
+        {
+            "before": [
+                "<leader>",
+                "c",
+                "a"
+            ],
+            "commands": [
+                "editor.action.quickFix"
+            ]
+        },
+        {
+            "before": [
+                "leader",
+                "f"
+            ],
+            "commands": [
+                "workbench.action.quickOpen"
+            ]
+        },
+    ],
+    "vim.visualModeKeyBindings": [
+        // Stay in visual mode while indenting
+        {
+            "before": [
+                "<"
+            ],
+            "commands": [
+                "editor.action.outdentLines"
+            ]
+        },
+        {
+            "before": [
+                ">"
+            ],
+            "commands": [
+                "editor.action.indentLines"
+            ]
+        },
+        // Move selected lines while staying in visual mode
+        {
+            "before": [
+                "J"
+            ],
+            "commands": [
+                "editor.action.moveLinesDownAction"
+            ]
+        },
+        {
+            "before": [
+                "K"
+            ],
+            "commands": [
+                "editor.action.moveLinesUpAction"
+            ]
+        },
+        // toggle comment selection
+        {
+            "before": [
+                "leader",
+                "c"
+            ],
+            "commands": [
+                "editor.action.commentLine"
+            ]
+        }
+    ],
+    "workbench.activityBar.location": "hidden",
+    "cursor.cpp.disabledLanguages": [
+        "plaintext",
+        "markdown",
+        "scminput"
+    ],
+    "editor.accessibilitySupport": "off",
+    "github.copilot.editor.enableAutoCompletions": true,
+    // "[typescriptreact]": {
+    //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+    // },
+    // "go.toolsManagement.autoUpdate": true,
+    // "[typescript]": {
+    //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+    // },
+    // "[jsonc]": {
+    //   "editor.defaultFormatter": "esbenp.prettier-vscode"
+    // }
+}

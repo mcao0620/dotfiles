@@ -1,0 +1,88 @@
+// Place your key bindings in this file to override the defaults
+[
+    // NAVIGATION
+    {
+        "key": "ctrl+shift+a",
+        "command": "workbench.action.terminal.focusNext",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+shift+b",
+        "command": "workbench.action.terminal.focusPrevious",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "ctrl+shift+j",
+        "command": "workbench.action.togglePanel"
+    },
+    {
+        "key": "ctrl+shift+n",
+        "command": "workbench.action.terminal.new",
+        "when": "terminalFocus"
+    },
+    {
+        "key": "space e",
+        "command": "workbench.action.toggleSidebarVisibility",
+        "when": "filesExplorerFocus && !inputFocus"
+    },
+    {
+        "key": "y",
+        "command": "filesExplorer.copy",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus"
+    },
+    {
+        "key": "p",
+        "command": "filesExplorer.paste",
+        "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceReadonly && !inputFocus"
+    },
+    {
+        "key": "n",
+        "command": "explorer.newFile",
+        "when": "filesExplorerFocus && !inputFocus"
+    },
+    {
+        "command": "renameFile",
+        "key": "r",
+        "when": "filesExplorerFocus && !inputFocus"
+    },
+    {
+        "key": "shift+n",
+        "command": "explorer.newFolder",
+        "when": "explorerViewletFocus"
+    },
+    {
+        "command": "deleteFile",
+        "key": "d",
+        "when": "filesExplorerFocus && !inputFocus"
+    },
+    // EXTRA
+    {
+        "key": "ctrl+shift+5",
+        "command": "editor.emmet.action.matchTag"
+    },
+    {
+        "key": "ctrl+z",
+        "command": "workbench.action.toggleZenMode"
+    },
+    // Enable scrolling on hover
+    {
+        "key": "h",
+        "command": "editor.action.scrollLeftHover",
+        "when": "editorHoverFocused"
+    },
+    {
+        "key": "j",
+        "command": "editor.action.scrollDownHover",
+        "when": "editorHoverFocused"
+    },
+    {
+        "key": "k",
+        "command": "editor.action.scrollUpHover",
+        "when": "editorHoverFocused"
+    },
+    {
+        "key": "l",
+        "command": "editor.action.scrollRightHover",
+        "when": "editorHoverFocused"
+    },
+]

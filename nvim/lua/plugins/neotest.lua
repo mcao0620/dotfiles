@@ -1,0 +1,38 @@
+return {
+  "nvim-neotest/neotest",
+  dependencies = {
+    "nvim-neotest/nvim-nio",
+    "nvim-lua/plenary.nvim",
+    "antoinemadec/FixCursorHold.nvim",
+    "nvim-treesitter/nvim-treesitter",
+    "sluongng/neotest-bazel",
+  },
+  opts = {
+    adapters = {
+      "neotest-bazel",
+    },
+  },
+}
+
+-- return {
+--   {
+--     "nvim-neotest/neotest",
+--     dependencies = {
+--       -- Neotest dependencies
+--       "nvim-neotest/nvim-nio",
+--       "nvim-lua/plenary.nvim",
+--       "antoinemadec/FixCursorHold.nvim",
+--       "nvim-treesitter/nvim-treesitter",
+--       -- Our adapter
+--       "sluongng/neotest-bazel",
+--     },
+--     config = function()
+--       require("neotest").setup({
+--         adapters = {
+--           -- Our adapter registration
+--           require("neotest-bazel"),
+--         },
+--       })
+--     end,
+--   },
+-- }
