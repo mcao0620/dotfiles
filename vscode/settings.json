@@ -323,6 +323,14 @@
         "asvetliakov.vscode-neovim": 1
     },
     "editor.smoothScrolling": true,
+    "editor.tabCompletion": "on",
+    "cursor.cpp.enablePartialAccepts": true,
+    "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
     // "[typescriptreact]": {
     //   "editor.defaultFormatter": "esbenp.prettier-vscode"
     // },

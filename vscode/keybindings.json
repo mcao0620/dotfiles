@@ -21,11 +21,6 @@
         "when": "terminalFocus"
     },
     {
-        "key": "space e",
-        "command": "workbench.action.toggleSidebarVisibility",
-        "when": "filesExplorerFocus && !inputFocus"
-    },
-    {
         "key": "y",
         "command": "filesExplorer.copy",
         "when": "explorerViewletVisible && filesExplorerFocus && !explorerResourceIsRoot && !inputFocus"
@@ -128,5 +123,10 @@
         "key": "ctrl+f",
         "command": "-vscode-neovim.ctrl-f",
         "when": "editorTextFocus && neovim.ctrlKeysNormal.f && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
+    },
+    {
+        "key": "space e",
+        "command": "workbench.action.toggleSidebarVisibility",
+        "when": "!inputFocus"
     }
 ]

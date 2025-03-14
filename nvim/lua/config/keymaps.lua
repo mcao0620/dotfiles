@@ -50,9 +50,9 @@ local function vscodeMappings()
     callVSCodeFunction("call VSCodeNotify('workbench.action.quickOpen')")
   end, { noremap = true, desc = "open files" })
 
-  map("n", "<leader>gg", function()
-    callVSCodeFunction("call VSCodeNotify('workbench.view.scm')")
-  end, { noremap = true, desc = "open git source control" })
+  -- map("n", "<leader>gg", function()
+  --   callVSCodeFunction("call VSCodeNotify('workbench.action.togglePanel')")
+  -- end, { noremap = true, desc = "open git source control" })
 
   -- map("n", "<leader>sml", function()
   --   callVSCodeFunction("call VSCodeNotify('bookmarks.list')")
