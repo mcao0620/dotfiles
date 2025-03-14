@@ -71,6 +71,7 @@ alias home='cd ~'
 alias config='cd ~/dev/dotfiles'
 alias vim='nvim'
 alias v='nvim'
+alias lg='lazygit'
 
 # ------------------------------------
 #        zsh Vim mode
