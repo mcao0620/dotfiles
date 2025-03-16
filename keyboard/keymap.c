@@ -17,15 +17,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include QMK_KEYBOARD_H
+#include "features/custom_shift_keys.h"
+
+const custom_shift_key_t custom_shift_keys[] = {
+  {KC_EXLM , KC_EXLM},
+  {KC_MINS , KC_MINS},
+  {KC_PLUS , KC_PLUS},
+  {KC_BSLS , KC_BSLS},
+  {KC_EQL  ,  KC_EQL},
+};
+uint8_t NUM_CUSTOM_SHIFT_KEYS =
+    sizeof(custom_shift_keys) / sizeof(custom_shift_key_t);
+
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+  if (!process_custom_shift_keys(keycode, record)) { return false; }
+  return true;
+}
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [0] = LAYOUT_split_3x6_3_ex2(
 //,-----------------------------------------------------.                    ,-----------------------------------------------------.
      KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,  KC_LCTL,  KC_VOLU,     KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
 //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-     KC_LCTL,   KC_A,  KC_S,   KC_D,   KC_F,    KC_G,  KC_LALT,  KC_VOLD,     KC_H,   KC_J,   KC_K,   KC_L, KC_SCLN, KC_QUOT,
+     LCTL_T(KC_ESC),   KC_A,  KC_S,   KC_D,   KC_F,    KC_G,  KC_LALT,  KC_VOLD,     KC_H,   KC_J,   KC_K,   KC_L, KC_SCLN, KC_QUOT,
 //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-    KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_ENT,
+    KC_UNDS,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  KC_ENT,
 //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                         KC_LGUI,   MO(1),  KC_SPC,     KC_RSFT,   MO(2), KC_RGUI
                                     //`--------------------------'  `--------------------------'
@@ -35,7 +51,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //,-----------------------------------------------------.                    ,-----------------------------------------------------.
      KC_TAB,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, KC_LCTL,    KC_BRIU,     KC_6,    KC_7,    KC_8,    KC_9,    KC_0, KC_BSPC,
 //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-KC_LCTL,HYPR(KC_1),HYPR(KC_2),HYPR(KC_3),HYPR(KC_4),XXXXXXX,KC_LALT,  KC_BRID,  KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX, XXXXXXX,
+    LCTL_T(KC_ESC), KC_LSFT, KC_LALT, KC_LCTL, KC_LGUI, XXXXXXX,   KC_LALT,KC_BRID, KC_LEFT, KC_DOWN,   KC_UP,KC_RIGHT, XXXXXXX, XXXXXXX,
 //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
     KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
 //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
@@ -45,11 +61,11 @@ KC_LCTL,HYPR(KC_1),HYPR(KC_2),HYPR(KC_3),HYPR(KC_4),XXXXXXX,KC_LALT,  KC_BRID,  
 
     [2] = LAYOUT_split_3x6_3_ex2(
 //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-     KC_TAB, KC_EXLM,   KC_AT, KC_HASH,  KC_DLR, KC_PERC, KC_LCTL,   KC_VOLU,  KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
+     KC_TAB, KC_EXLM, S(KC_COMM), S(KC_DOT),  KC_DLR, KC_PERC, KC_LCTL,   KC_VOLU,  KC_CIRC, KC_AMPR, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSPC,
 //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-    KC_LCTL, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_LALT,   KC_VOLD,  KC_MINS,  KC_EQL, KC_LBRC, KC_RBRC, KC_BSLS,  KC_GRV,
+    LCTL_T(KC_ESC), KC_EXLM, KC_MINS, KC_PLUS, KC_EQL, KC_HASH, KC_LALT,    KC_VOLD,  XXXXXXX, KC_RGUI, KC_RCTL, KC_RALT, KC_RSFT, KC_GRV,
 //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-    KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, KC_TILD,
+    KC_LSFT, XXXXXXX, KC_SLSH, KC_ASTR, KC_BSLS, KC_TILD,                      XXXXXXX, KC_LBRC, KC_LCBR, KC_RCBR, KC_RBRC, KC_PIPE,
 //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                         KC_LGUI,   MO(3),  KC_SPC,     KC_RSFT, _______, KC_RGUI
                                     //`--------------------------'  `--------------------------'

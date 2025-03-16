@@ -21,6 +21,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 /*#define SPLIT_USB_DETECT*/
 /*#define MASTER_LEFT*/
+#define TAPPING_TERM 0
+#define RETRO_TAPPING        // Sends tap action on release if no other key pressed
+#define PERMISSIVE_HOLD      // Bypasses hold if another key is pressed during tapping term
 
 #ifdef RGBLIGHT_ENABLE
     #define RGBLIGHT_EFFECT_BREATHING
