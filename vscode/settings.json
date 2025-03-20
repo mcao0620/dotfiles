@@ -11,6 +11,27 @@
   "vim.highlightedyank.duration": 200,
   "vim.useSystemClipboard": true,
   "vim.normalModeKeyBindingsNonRecursive": [
+    // Remaps
+    {
+      "before": [
+        "<C-u>"
+      ],
+      "after": [
+        "<C-u>",
+        "z",
+        "z"
+      ]
+    },
+    {
+      "before": [
+        "<C-d>"
+      ],
+      "after": [
+        "<C-d>",
+        "z",
+        "z"
+      ]
+    },
     // File Tree
     {
       "before": [
@@ -129,13 +150,7 @@
         "u"
       ],
       "commands": [
-        {
-          "command": "editor.action.sourceAction",
-          "args": {
-            "kind": "source.addMissingImports",
-            "apply": "first"
-          }
-        }
+        "typescript.removeUnusedImports"
       ]
     },
     {
@@ -554,7 +569,7 @@
     },
   ],
   "editor.accessibilitySupport": "off",
-  "editor.smoothScrolling": true,
+  // "editor.smoothScrolling": true,
   "vim.sneak": true,
   "vsicons.dontShowNewVersionMessage": true,
   "vim.smartRelativeLine": true,
@@ -571,10 +586,23 @@
   "window.density.editorTabHeight": "compact",
   "window.commandCenter": false,
   "window.title": "${rootName}${separator}${activeRepositoryBranchName}${separator}${profileName}",
-  "search.mode": "newEditor",
   "editor.fontSize": 14,
   "terminal.integrated.fontSize": 14,
-  "cursor.cpp.enablePartialAccepts": true,
   "go.toolsManagement.autoUpdate": true,
-  "workbench.colorTheme": "Dark Modern (OLED Black)",
+  "windsurf.autocompleteSpeed": "fast",
+  "windsurf.cascadeOpenOnReload": false,
+  "windsurf.openRecentConversation": false,
+  "windsurfPyright.disableLanguageServices": true,
+  "windsurf.cascadeWebSearchDisabled": true,
+  "windsurf.autoExecutionPolicy": "off",
+  "windsurf.explainAndFixInCurrentConversation": true,
+  "windsurf.marketplaceExtensionGalleryServiceURL": "https://marketplace.visualstudio.com/_apis/public/gallery",
+  "windsurf.marketplaceGalleryItemURL": " https://marketplace.visualstudio.com/items",
+  "search.searchOnType": false,
+  "search.searchEditor.focusResultsOnSearch": true,
+  "search.mode": "newEditor",
+  "search.searchEditor.doubleClickBehaviour": "openLocationToSide",
+  "search.smartCase": true,
+  "workbench.colorTheme": "Tokyo Night Moon NVim",
+  "terminal.integrated.gpuAcceleration": "on"
 }

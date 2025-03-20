@@ -24,7 +24,7 @@ return {
     opts = {
       strategies = {
         chat = {
-          adapter = "copilot",
+          adapter = "openai",
           roles = {
             llm = "CodeCompanion",
             user = "Me",
@@ -51,16 +51,19 @@ return {
         },
       },
       inline = {
-        adapter = "copilot",
+        adapter = "openai",
       },
       adapters = {
-        copilot = function()
-          return require("codecompanion.adapters").extend("copilot", {
-            schema = {
-              model = {
-                default = "claude-3.5-sonnet",
-              },
+        openai = function()
+          return require("codecompanion.adapters").extend("openai", {
+            env = {
+              api_key = "cmd:cat $HOME/.openaikey",
             },
+            -- schema = {
+            --   model = {
+            --     default = "",
+            --   },
+            -- },
           })
         end,
       },

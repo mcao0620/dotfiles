@@ -29,7 +29,7 @@
     "when": "terminalFocus"
   },
   {
-    "key": "ctrl+n",
+    "key": "ctrl+shift+n",
     "command": "workbench.action.terminal.split",
     "when": "terminalFocus"
   },
