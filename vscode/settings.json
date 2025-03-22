@@ -604,5 +604,160 @@
   "search.searchEditor.doubleClickBehaviour": "openLocationToSide",
   "search.smartCase": true,
   "workbench.colorTheme": "Tokyo Night Moon NVim",
-  "terminal.integrated.gpuAcceleration": "on"
+  "terminal.integrated.gpuAcceleration": "on",
+  // GLEAN WORKSPACE SETTINGS
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "true"
+    }
+  },
+  "[yaml]": {
+    // Recommended in ./vscode/extensions.json. It works well for autoformatting according to yamllint's settings
+    "editor.defaultFormatter": "redhat.vscode-yaml"
+  },
+  "[typescript][typescriptreact][javascript][javascriptreact]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": "explicit"
+    },
+  },
+  "[go]": {
+    "editor.rulers": [
+      100
+    ],
+  },
+  "editor.rulers": [
+    120
+  ],
+  "editor.suggest.snippetsPreventQuickSuggestions": false,
+  "editor.tabSize": 2,
+  "emmet.showAbbreviationSuggestions": false,
+  "emmet.showExpandedAbbreviation": "never",
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "typescript",
+    "typescriptreact"
+  ],
+  "eslint.runtime": "node",
+  "files.associations": {
+    "*.exp": "textproto",
+    "*.textpb": "textproto"
+  },
+  "files.exclude": {
+    "**/*.egg-info": true,
+    "**/*.feather": true,
+    "**/*.log.txt": true,
+    "**/*.parquet*": true,
+    "**/*.pyc": true,
+    "**/*.zip": true,
+    "**/.*.swp": true,
+    "**/.bazel": true,
+    "**/.cache": true,
+    "**/.classpath": true,
+    "**/.DS_Store": true,
+    "**/.eggs": true,
+    "**/.factorypath": true,
+    "**/.git": true,
+    "**/.idea": true,
+    "**/.ijwb": true,
+    "**/.iml": true,
+    "**/.ipynb_checkpoints": true,
+    "**/.mypy_cache": true,
+    "**/.project": true,
+    "**/.pytest_cache": true,
+    "**/.pytype": true,
+    "**/.webpack": true,
+    "**/.settings": true,
+    "**/__pycache__": true,
+    "**/bazel-out": true,
+    "**/dist": true,
+    "**/python_scio/scio_env": true,
+    "**/test-run": true,
+    "**/typescript/coverage": true
+  },
+  "files.insertFinalNewline": true,
+  "files.watcherExclude": {
+    "**/.bazel/**": true,
+    "**/.git/**": true,
+    "**/@babel/**": true,
+    "**/bazel-out/**": true,
+    "**/dist/**": true,
+    "**/python_scio/scio_env/**": true,
+    "**/typescript/coverage/**": true
+  },
+  "go.buildOnSave": "off",
+  "go.enableCodeLens": {
+    "references": false,
+    "runtest": false
+  },
+  "go.lintOnSave": "off",
+  "go.toolsEnvVars": {
+    "GOPACKAGESDRIVER": "/Users/michaelcao/workspace/scio/tools/gopackagesdriver.sh"
+  },
+  "go.useLanguageServer": true,
+  "go.vetOnSave": "off",
+  "gopls": {
+    "build.directoryFilters": [
+      "-bazel-bin",
+      "-bazel-out",
+      "-bazel-testlogs",
+      "-bazel-mypkg"
+    ],
+    "formatting.gofumpt": false,
+    "formatting.local": "github.com/askscio/scio/go",
+    "ui.codelenses": {
+      "gc_details": false,
+      "generate": false,
+      "regenerate_cgo": false,
+      "test": false,
+      "tidy": false,
+      "upgrade_dependency": false,
+      "vendor": false
+    },
+    "ui.completion.usePlaceholders": true,
+    "ui.semanticTokens": true
+  },
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "data/render_configs/*"
+      ],
+      "url": "./data/render_configs/renderConfig.schema.json"
+    }
+  ],
+  "python.analysis.extraPaths": [
+    ".bazel/out/darwin-fastbuild/bin/",
+    ".bazel/out/darwin_arm64-fastbuild/bin/"
+  ],
+  "python.defaultInterpreterPath": "python_scio/scio_env/bin/python",
+  "python.languageServer": "Pylance",
+  "search.exclude": {
+    "deploy/scio/appengine/**": true,
+    "python_scio/deployment/go_apps/**": true,
+    "typescript/coverage/**": true
+  },
+  "search.useGlobalIgnoreFiles": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  // All of these have preferred Glean-wrappers
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "@lingui/react",
+    "workbox-core/_private"
+  ],
+  "vsicons.presets.hideFolders": true,
+  // Redhat yaml formatter options that play well with yamllint
+  "yaml.format.printWidth": 120,
+  "yaml.format.proseWrap": "always",
+  "java.configuration.updateBuildConfiguration": "interactive",
+  // See https://askscio.slack.com/archives/C02T8886ZB8/p1738644640185799. VSCode will complete imports preferring a
+  // full/path/to/file. Even in the ./same/subfolder or .sameFile cases. Though we desire a rule of:
+  // "prefer full for ancestors, and relative okay for same subtree", VSCode does not give us the option. If authors
+  // feel strongly, they can replace full imports with "same subtree". Ray comment: I suspect devs will blindly take
+  // what VScode gives us, and not have a strong opinion. Always full import has a large-scale refactoring benefit in
+  // that renames, and file moves are braindead because the import is always the same.
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "git.openRepositoryInParentFolders": "always",
+  "windsurf.chatFontSize": "default",
+  "windsurf.rememberLastModelSelection": true
 }
