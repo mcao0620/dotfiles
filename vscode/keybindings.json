@@ -35,7 +35,7 @@
   },
   {
     "key": "ctrl+/",
-    "command": "workbench.action.togglePanel"
+    "command": "workbench.action.terminal.toggleTerminal"
   },
   // File Tree
   {
@@ -72,7 +72,7 @@
   {
     "key": "shift+n",
     "command": "explorer.newFolder",
-    "when": "explorerViewletFocus"
+    "when": "explorerViewletFocus && !inputFocus"
   },
   {
     "command": "deleteFile",
@@ -113,5 +113,26 @@
   {
     "key": "cmd+shift+t",
     "command": "workbench.action.reopenClosedEditor"
+  },
+  // {
+  //   "key": "cmd+k",
+  //   "command": "windsurf.prioritized.command.open"
+  // },
+  {
+    "key": "cmd+i",
+    "command": "-windsurf.prioritized.command.open",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "cmd+i",
+    "command": "composerMode.agent"
+  },
+  {
+    "key": "cmd+l",
+    "command": "composerMode.chat"
+  },
+  {
+    "key": "cmd+shift+k",
+    "command": "composerMode.edit"
   },
 ]

@@ -48,9 +48,9 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case LCTL_T(KC_ESC):
             return 0;
-        case LT(1, KC_ENT):
+        case LT(1, KC_TAB):
             return 0;
-        case LT(2, KC_TAB):
+        case LT(2, KC_ENT):
             return 0;
         default:
             return TAPPING_TERM;
@@ -117,7 +117,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
     XXXXXXX,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, KC_COMM,  KC_DOT, KC_SLSH,  XXXXXXX,
 //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                        KC_LGUI,   LT(1, KC_ENT),  KC_SPC,     KC_RSFT, LT(2, KC_TAB), KC_RGUI
+                                        KC_LGUI,   LT(1, KC_TAB),  KC_SPC,     KC_RSFT, LT(2, KC_ENT), KC_RGUI
                                     //`--------------------------'  `--------------------------'
 
   ),

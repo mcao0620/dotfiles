@@ -1,8 +1,10 @@
- theme = "/Users/michaelcao/dev/dotfiles/ghostty/tokyonight_moon"
+theme = "/Users/michaelcao/dev/dotfiles/ghostty/tokyonight_moon"
 macos-titlebar-style = "tabs"
-font-size = 14
-font-thicken = true
-adjust-cell-width = -2%
-adjust-cell-height = +5%
-# background=000000
+font-family = Iosevka Term
+# font-style = semibold
+font-size = 20
+# font-thicken = true
+adjust-cell-width = -5%
+# adjust-cell-height = +5%
 keybind = global:cmd+ctrl+i=toggle_quick_terminal
+keybind = cmd+r=reload_config

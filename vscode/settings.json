@@ -357,7 +357,7 @@
         "<S-h>"
       ],
       "commands": [
-        "workbench.action.previousEditor"
+        "workbench.action.previousEditorInGroup"
       ]
     },
     {
@@ -365,7 +365,7 @@
         "<S-l>"
       ],
       "commands": [
-        "workbench.action.nextEditor"
+        "workbench.action.nextEditorInGroup"
       ]
     },
     {
@@ -463,6 +463,10 @@
       "commands": [
         "editor.action.quickFix"
       ]
+    },
+    {
+      "before": ["s"],
+      "after": ["<leader>", "<leader>", "2", "s"]
     },
   ],
   "vim.visualModeKeyBindingsNonRecursive": [
@@ -586,7 +590,7 @@
   "window.density.editorTabHeight": "compact",
   "window.commandCenter": false,
   "window.title": "${rootName}${separator}${activeRepositoryBranchName}${separator}${profileName}",
-  "editor.fontSize": 14,
+  "editor.fontSize": 16,
   "terminal.integrated.fontSize": 14,
   "go.toolsManagement.autoUpdate": true,
   "windsurf.autocompleteSpeed": "fast",
@@ -603,8 +607,11 @@
   "search.mode": "newEditor",
   "search.searchEditor.doubleClickBehaviour": "openLocationToSide",
   "search.smartCase": true,
-  "workbench.colorTheme": "Tokyo Night Moon NVim",
   "terminal.integrated.gpuAcceleration": "on",
+  // GLEAN CURSOR HARDENING
+  "window.commandCenter": 1,
+  "security.workspace.trust.enabled": true,
+  "cursor.terminal.usePreviewBox": true,
   // GLEAN WORKSPACE SETTINGS
   "[python]": {
     "editor.codeActionsOnSave": {
@@ -759,5 +766,8 @@
   "typescript.preferences.importModuleSpecifier": "non-relative",
   "git.openRepositoryInParentFolders": "always",
   "windsurf.chatFontSize": "default",
-  "windsurf.rememberLastModelSelection": true
+  "windsurf.rememberLastModelSelection": true,
+  "vim.easymotion": true,
+  "editor.fontFamily": "Monaco, Iosevka Term, Menlo, 'Courier New', monospace",
+  "cursor.cpp.enablePartialAccepts": true,
 }
