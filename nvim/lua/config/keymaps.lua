@@ -15,9 +15,11 @@ vim.keymap.set(
 
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<A-j>", "")
+vim.keymap.set("n", "<A-k>", "")
 
 -- bazel
-local bazel = require("bazel")
+-- local bazel = require("bazel")
 -- local my_bazel = require("config.bazel")
 -- vim.api.nvim_create_autocmd("FileType", {
 --   pattern = "bzl",
@@ -31,7 +33,7 @@ local bazel = require("bazel")
 --     vim.keymap.set("n", "<Leader>y", my_bazel.YankLabel, { desc = "Bazel Yank Label" })
 --   end,
 -- })
-vim.keymap.set("n", "gzt", vim.fn.GoToBazelTarget, { desc = "Goto Bazel Build File" })
+-- vim.keymap.set("n", "gzt", vim.fn.GoToBazelTarget, { desc = "Goto Bazel Build File" })
 -- vim.keymap.set("n", "<Leader>zl", bazel.run_last, { desc = "Bazel Last" })
 -- vim.keymap.set("n", "<Leader>zdt", my_bazel.DebugTest, { desc = "Bazel Debug Test" })
 -- vim.keymap.set("n", "<Leader>zdr", my_bazel.DebugRun, { desc = "Bazel Debug Run" })

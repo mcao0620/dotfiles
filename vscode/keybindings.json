@@ -1,14 +1,18 @@
 [
   // Key Navigation
+ {
+    "key": "ctrl+j",
+    "command": "workbench.action.navigateDown"
+  },
   {
     "key": "ctrl+h",
     "command": "workbench.action.navigateLeft",
-    "when": "!terminalFocus"
+    "when": "!panelVisible"
   },
   {
     "key": "ctrl+l",
     "command": "workbench.action.navigateRight",
-    "when": "!terminalFocus"
+    "when": "!panelVisible"
   },
   {
     "key": "ctrl+k",
@@ -21,10 +25,20 @@
   {
     "key": "ctrl+h",
     "command": "workbench.action.terminal.focusPreviousPane",
-    "when": "terminalFocus"
+    "when": "terminalFocus && panelVisible"
   },
   {
     "key": "ctrl+l",
+    "command": "workbench.action.terminal.focusNextPane",
+    "when": "terminalFocus && panelVisible"
+  },
+  {
+    "key": "ctrl+j",
+    "command": "workbench.action.terminal.focusPreviousPane",
+    "when": "terminalFocus"
+  },
+  {
+    "key": "ctrl+k",
     "command": "workbench.action.terminal.focusNextPane",
     "when": "terminalFocus"
   },
@@ -135,4 +149,16 @@
     "key": "cmd+shift+k",
     "command": "composerMode.edit"
   },
+  {
+    "key": "cmd+e",
+    "command": "composerMode.background"
+},
+{
+    "key": "shift+enter",
+    "command": "workbench.action.terminal.sendSequence",
+    "args": {
+        "text": "\\\r\n"
+    },
+    "when": "terminalFocus"
+},
 ]
