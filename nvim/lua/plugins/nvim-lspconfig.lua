@@ -5,6 +5,12 @@ return {
       gopls = {
         settings = {
           gopls = {
+            -- Enable Bazel support
+            ["build.buildFlags"] = { "-tags=bazel" },
+            ["build.env"] = {
+              GOPROXY = "direct",
+              GOSUMDB = "off",
+            },
             env = {
               GOPACKAGESDRIVER = vim.fn.fnamemodify("./tools/gopackagesdriver.sh", ":p"),
             },

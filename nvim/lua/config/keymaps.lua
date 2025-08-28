@@ -1,10 +1,10 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
-vim.keymap.set("n", "<C-h>", "<Cmd>TmuxNavigateLeft<CR>", { silent = true })
-vim.keymap.set("n", "<C-j>", "<Cmd>TmuxNavigateDown<CR>", { silent = true })
-vim.keymap.set("n", "<C-k>", "<Cmd>TmuxNavigateUp<CR>", { silent = true })
-vim.keymap.set("n", "<C-l>", "<Cmd>TmuxNavigateRight<CR>", { silent = true })
+vim.keymap.set({ "n", "v", "i", "t" }, "<C-h>", "<Cmd>TmuxNavigateLeft<CR>", { silent = true })
+vim.keymap.set({ "n", "v", "i", "t" }, "<C-j>", "<Cmd>TmuxNavigateDown<CR>", { silent = true })
+vim.keymap.set({ "n", "v", "i", "t" }, "<C-k>", "<Cmd>TmuxNavigateUp<CR>", { silent = true })
+vim.keymap.set({ "n", "v", "i", "t" }, "<C-l>", "<Cmd>TmuxNavigateRight<CR>", { silent = true })
 
 vim.keymap.set(
   "n",
@@ -17,7 +17,12 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<A-j>", "")
 vim.keymap.set("n", "<A-k>", "")
+vim.keymap.set("n", "<S-j>", "")
 
+-- local keys = require("lazyvim.config.keymaps").get()
+-- keys[#keys + 1] = { "<leader>gg", false } -- Unbind specific key
+-- keys[#keys + 1] = { "<C-/>", false } -- Unbind specific key
+--
 -- bazel
 -- local bazel = require("bazel")
 -- local my_bazel = require("config.bazel")

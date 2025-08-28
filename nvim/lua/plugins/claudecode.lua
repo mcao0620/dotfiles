@@ -1,5 +1,6 @@
 return {
   "coder/claudecode.nvim",
+  event = "VimEnter",
   dependencies = { "folke/snacks.nvim" },
   config = true,
   keys = {
