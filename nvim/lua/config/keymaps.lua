@@ -6,52 +6,100 @@ vim.keymap.set({ "n", "v", "i", "t" }, "<C-j>", "<Cmd>TmuxNavigateDown<CR>", { s
 vim.keymap.set({ "n", "v", "i", "t" }, "<C-k>", "<Cmd>TmuxNavigateUp<CR>", { silent = true })
 vim.keymap.set({ "n", "v", "i", "t" }, "<C-l>", "<Cmd>TmuxNavigateRight<CR>", { silent = true })
 
-vim.keymap.set(
-  "n",
-  "<leader>sx",
-  require("telescope.builtin").resume,
-  { noremap = true, silent = true, desc = "Resume" }
-)
-
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
 vim.keymap.set("n", "<A-j>", "")
 vim.keymap.set("n", "<A-k>", "")
 vim.keymap.set("n", "<S-j>", "")
 
--- local keys = require("lazyvim.config.keymaps").get()
--- keys[#keys + 1] = { "<leader>gg", false } -- Unbind specific key
--- keys[#keys + 1] = { "<C-/>", false } -- Unbind specific key
+-- vim.keymap.set("n", "<leader><space>", function()
+--   require("lazyvim.util").pick("files", { root = false })
+-- end, { desc = "Find Files (cwd)" })
 --
--- bazel
--- local bazel = require("bazel")
--- local my_bazel = require("config.bazel")
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "bzl",
---   callback = function()
---     vim.keymap.set("n", "gd", vim.fn.GoToBazelDefinition, { buffer = true, desc = "Goto Definition" })
---   end,
--- })
--- vim.api.nvim_create_autocmd("FileType", {
---   pattern = "bzl",
---   callback = function()
---     vim.keymap.set("n", "<Leader>y", my_bazel.YankLabel, { desc = "Bazel Yank Label" })
---   end,
--- })
--- vim.keymap.set("n", "gzt", vim.fn.GoToBazelTarget, { desc = "Goto Bazel Build File" })
--- vim.keymap.set("n", "<Leader>zl", bazel.run_last, { desc = "Bazel Last" })
--- vim.keymap.set("n", "<Leader>zdt", my_bazel.DebugTest, { desc = "Bazel Debug Test" })
--- vim.keymap.set("n", "<Leader>zdr", my_bazel.DebugRun, { desc = "Bazel Debug Run" })
--- vim.keymap.set("n", "<Leader>zt", function()
---   bazel.run_here("test", vim.g.bazel_config)
--- end, { desc = "Bazel Test" })
--- vim.keyamp.set("n", "<Leader>zb", function()
---   bazel.run_here("build", vim.g.bazel_config)
--- end, { desc = "Bazel Build" })
--- vim.keymap.set("n", "<Leader>zr", function()
---   bazel.run_here("run", vim.g.bazel_config)
--- end, { desc = "Bazel Run" })
--- vim.keymap.set("n", "<Leader>zdb", function()
---   bazel.run_here("build", vim.g.bazel_config .. " --compilation_mode dbg --copt=-O0")
--- end, { desc = "Bazel Debug Build" })
--- vim.keymap.set("n", "<Leader>zda", my_bazel.set_debug_args_from_input, { desc = "Set Bazel Debug Arguments" })
+-- Robust argument splitter for one-line function calls.
+-- Allows trailing ., method-chains, comments, etc.
+
+local function split_args_line()
+  local line = vim.api.nvim_get_current_line()
+  if not line or line:match("^%s*$") then
+    return
+  end
+
+  -- Capture indent, function name, args, and trailing text
+  -- Accepts lines like:
+  --   Func(arg1, arg2).Something()
+  --   Foo(a,b) // comment
+  --   Bar(x,y,z)   .
+  local indent, func, argstr, trailing = line:match("^(%s*)([%w_%.:]+)%s*%((.*)%)%s*(.-)%s*$")
+
+  if not func or not argstr then
+    vim.notify("SplitArgs: current line doesn't look like a function call", vim.log.levels.INFO)
+    return
+  end
+
+  -- Split args by top-level commas
+  local function split_args_str(s)
+    local args = {}
+    local current = {}
+    local depth = 0
+
+    local function push_current()
+      local raw = table.concat(current)
+      if raw:match("%S") then
+        table.insert(args, vim.trim(raw))
+      end
+      current = {}
+    end
+
+    for i = 1, #s do
+      local c = s:sub(i, i)
+      if c == "(" or c == "[" or c == "{" then
+        depth = depth + 1
+        table.insert(current, c)
+      elseif c == ")" or c == "]" or c == "}" then
+        depth = depth - 1
+        table.insert(current, c)
+      elseif c == "," and depth == 0 then
+        push_current()
+      else
+        table.insert(current, c)
+      end
+    end
+
+    push_current()
+    return args
+  end
+
+  local args = split_args_str(argstr)
+  if #args == 0 then
+    vim.notify("SplitArgs: no args found", vim.log.levels.INFO)
+    return
+  end
+
+  local new_lines = {}
+  table.insert(new_lines, indent .. func .. "(")
+
+  local arg_indent = indent .. "    "
+
+  for _, a in ipairs(args) do
+    table.insert(new_lines, arg_indent .. a .. ",")
+  end
+
+  table.insert(new_lines, indent .. ")" .. (trailing ~= "" and " " .. trailing or ""))
+
+  local row = vim.api.nvim_win_get_cursor(0)[1] - 1
+  vim.api.nvim_buf_set_lines(0, row, row + 1, false, new_lines)
+end
+
+vim.keymap.set("n", "<leader>ts", split_args_line, { desc = "Split function args on current line" })
+
+-- Join lines using count, like J
+local function join_with_count(count)
+  count = count or vim.v.count1 + 1
+  vim.cmd("normal! " .. count .. "J")
+end
+
+-- Map <leader>sj as a count-aware join
+vim.keymap.set("n", "<leader>jl", function()
+  join_with_count()
+end, { desc = "Join lines with count" })

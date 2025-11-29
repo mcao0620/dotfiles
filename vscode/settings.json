@@ -10,6 +10,12 @@
   "vim.highlightedyank.color": "#a9dc7660",
   "vim.highlightedyank.duration": 200,
   "vim.useSystemClipboard": true,
+  "[proto3]": {
+    "editor.formatOnSave": false
+  },
+  "[yaml]": {
+    "editor.formatOnSave": false
+  },
   "vim.normalModeKeyBindingsNonRecursive": [
     // Remaps
     {
@@ -463,6 +469,16 @@
     {
       "before": [
         "<leader>",
+        "j",
+        "l"
+      ],
+      "commands": [
+        "editor.action.joinLines"
+      ]
+    },
+    {
+      "before": [
+        "<leader>",
         "b",
         "b"
       ],
@@ -501,8 +517,15 @@
       ]
     },
     {
-      "before": ["s"],
-      "after": ["<leader>", "<leader>", "2", "s"]
+      "before": [
+        "s"
+      ],
+      "after": [
+        "<leader>",
+        "<leader>",
+        "2",
+        "s"
+      ]
     },
   ],
   "vim.visualModeKeyBindingsNonRecursive": [
@@ -808,5 +831,8 @@
   "windsurf.rememberLastModelSelection": true,
   "vim.easymotion": true,
   "editor.fontFamily": "Monaco, Iosevka Term, Menlo, 'Courier New', monospace",
+  "terminal.integrated.fontFamily": "Monaco, Iosevka Term, Menlo, 'Courier New', monospace",
+  "editor.fontWeight": "400",
   "cursor.cpp.enablePartialAccepts": true,
+  "remote.SSH.remotePlatform": {"coder-vscode.coder.internal.glean.com--michaelcao--michael-cao-dev.main":"linux"},"remote.SSH.connectTimeout": 1800,
 }

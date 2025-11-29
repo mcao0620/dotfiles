@@ -7,10 +7,6 @@ return {
           gopls = {
             -- Enable Bazel support
             ["build.buildFlags"] = { "-tags=bazel" },
-            ["build.env"] = {
-              GOPROXY = "direct",
-              GOSUMDB = "off",
-            },
             env = {
               GOPACKAGESDRIVER = vim.fn.fnamemodify("./tools/gopackagesdriver.sh", ":p"),
             },
@@ -51,15 +47,16 @@ return {
           yaml = {
             format = {
               enable = false,
-              -- printWidth = 120,
-              -- proseWrap = "always",
-              -- singleQuote = true,
             },
-            -- schemas = {
-            --   ["https://spec.openapis.org/oas/3.0/schema/2021-09-28"] = "openapi/**/*.yaml",
-            -- },
           },
         },
+      },
+      buf_ls = {
+        on_attach = function(client, _)
+          -- Disable formatting capabilities for buf_ls
+          client.server_capabilities.documentFormattingProvider = false
+          client.server_capabilities.documentRangeFormattingProvider = false
+        end,
       },
     },
   },

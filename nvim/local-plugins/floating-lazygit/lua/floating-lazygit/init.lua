@@ -32,7 +32,6 @@ local function create_floating_window(opts)
     col = col,
     row = row,
     style = "minimal", -- No borders or extra UI elements
-    -- border = "rounded",
   }
 
   -- Create the floating window
@@ -48,13 +47,9 @@ local function toggle_lazygit()
       vim.fn.termopen("lazygit")
     end
     -- Set buffer-local keymap to hide terminal with "q" in terminal mode
-    vim.keymap.set("t", "q", function()
-      vim.api.nvim_win_hide(state.floating.win)
-    end, { buffer = state.floating.buf, desc = "Hide floating lazygit" })
-    -- vim.keymap.set("t", "<C-.>", function()
+    -- vim.keymap.set("t", "q", function()
     --   vim.api.nvim_win_hide(state.floating.win)
     -- end, { buffer = state.floating.buf, desc = "Hide floating lazygit" })
-    -- Start in insert mode (terminal mode)
     vim.cmd.startinsert()
   else
     vim.api.nvim_win_hide(state.floating.win)
@@ -64,9 +59,6 @@ end
 function M.setup()
   -- Create user command
   vim.api.nvim_create_user_command("FloatingLazygitToggle", toggle_lazygit, {})
-
-  -- Set up keymap
-  vim.keymap.set("n", "<leader>gg", toggle_lazygit, { desc = "Toggle floating lazygit" })
 end
 
 M.toggle_lazygit = toggle_lazygit
