@@ -1,5 +1,5 @@
--- inspiration: https://github.com/diogo464/hotreload.nvim
-local M = {}
+-- Hot reload buffers when files change on disk
+-- Inspiration: https://github.com/diogo464/hotreload.nvim
 
 local function should_check()
   local mode = vim.api.nvim_get_mode().mode
@@ -26,7 +26,7 @@ local function get_visible_buffers()
   return visible
 end
 
-local find_buffer_by_filepath = function(filepath)
+local function find_buffer_by_filepath(filepath)
   local visible_buffers = get_visible_buffers()
   for buf, _ in pairs(visible_buffers) do
     if vim.api.nvim_buf_get_name(buf) == filepath then
@@ -36,27 +36,28 @@ local find_buffer_by_filepath = function(filepath)
   return nil
 end
 
--- Register handler for file changes in watched directory
-require("custom.directory-watcher").registerOnChangeHandler("hotreload", function(filepath, events)
-  if not should_check() then
-    return
-  end
+-- Register directory watcher handler for file changes
+pcall(function()
+  require("custom.directory-watcher").registerOnChangeHandler("hotreload", function(filepath)
+    if not should_check() then
+      return
+    end
 
-  local buf = find_buffer_by_filepath(filepath)
-  if buf and should_reload_buffer(buf) then
-    vim.cmd("checktime " .. buf)
-  end
+    local buf = find_buffer_by_filepath(filepath)
+    if buf and should_reload_buffer(buf) then
+      vim.cmd("checktime " .. buf)
+    end
+  end)
 end)
 
-M.setup = function(opts)
-  vim.api.nvim_create_autocmd({ "FocusGained", "TermLeave", "BufEnter", "WinEnter", "CursorHold", "CursorHoldI" }, {
-    group = vim.api.nvim_create_augroup("hotreload", { clear = true }),
-    callback = function()
-      if should_check() then
-        vim.cmd("checktime")
-      end
-    end,
-  })
-end
+-- Autocmds for standard reload triggers
+vim.api.nvim_create_autocmd({ "FocusGained", "TermLeave", "BufEnter", "WinEnter", "CursorHold", "CursorHoldI" }, {
+  group = vim.api.nvim_create_augroup("hotreload", { clear = true }),
+  callback = function()
+    if should_check() then
+      vim.cmd("checktime")
+    end
+  end,
+})
 
-return M
+return {}
