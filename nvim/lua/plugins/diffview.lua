@@ -23,7 +23,9 @@ pcall(function()
   end)
 end)
 
-vim.api.nvim_create_autocmd("FocusGained", { callback = update_left_pane })
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold" }, {
+  callback = update_left_pane,
+})
 vim.api.nvim_create_autocmd("User", {
   pattern = "DiffviewViewLeave",
   callback = function()
