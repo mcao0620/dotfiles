@@ -1,6 +1,9 @@
 -- Options are automatically loaded before lazy.nvim startup
 -- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
 -- Add any additional options here
+--
+-- Automatically reload files when changed outside of Neovim (if buffer not modified)
+vim.opt.autoread = true
 
 -- Set column width lines for different file types
 vim.api.nvim_create_autocmd("FileType", {
