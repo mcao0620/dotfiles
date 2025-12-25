@@ -1,151 +1,105 @@
 -- Keymaps are automatically loaded on the VeryLazy event
 -- Default keymaps that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/keymaps.lua
 -- Add any additional keymaps here
-vim.keymap.set("n", "<C-h>", "<Cmd>TmuxNavigateLeft<CR>", { silent = true })
-vim.keymap.set("n", "<C-j>", "<Cmd>TmuxNavigateDown<CR>", { silent = true })
-vim.keymap.set("n", "<C-k>", "<Cmd>TmuxNavigateUp<CR>", { silent = true })
-vim.keymap.set("n", "<C-l>", "<Cmd>TmuxNavigateRight<CR>", { silent = true })
+vim.keymap.set({ "n", "v", "i", "t" }, "<C-h>", "<Cmd>TmuxNavigateLeft<CR>", { silent = true })
+vim.keymap.set({ "n", "v", "i", "t" }, "<C-j>", "<Cmd>TmuxNavigateDown<CR>", { silent = true })
+vim.keymap.set({ "n", "v", "i", "t" }, "<C-k>", "<Cmd>TmuxNavigateUp<CR>", { silent = true })
+vim.keymap.set({ "n", "v", "i", "t" }, "<C-l>", "<Cmd>TmuxNavigateRight<CR>", { silent = true })
 
-local function map(mode, lhs, rhs, opts)
-  local keys = require("lazy.core.handler").handlers.keys
-  ---@cast keys LazyKeysHandler
-  -- do not create the keymap if a lazy keys handler exists
-  if not keys.active[keys.parse({ lhs, mode = mode }).id] then
-    opts = opts or {}
-    opts.silent = opts.silent ~= false
-    if opts.remap and not vim.g.vscode then
-      opts.remap = nil
-    end
-    vim.keymap.set(mode, lhs, rhs, opts)
+vim.keymap.set("n", "<C-u>", "<C-u>zz")
+vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<A-j>", "")
+vim.keymap.set("n", "<A-k>", "")
+vim.keymap.set("n", "<S-j>", "")
+
+-- vim.keymap.set("n", "<leader><space>", function()
+--   require("lazyvim.util").pick("files", { root = false })
+-- end, { desc = "Find Files (cwd)" })
+--
+-- Robust argument splitter for one-line function calls.
+-- Allows trailing ., method-chains, comments, etc.
+
+local function split_args_line()
+  local line = vim.api.nvim_get_current_line()
+  if not line or line:match("^%s*$") then
+    return
   end
+
+  -- Capture indent, function name, args, and trailing text
+  -- Accepts lines like:
+  --   Func(arg1, arg2).Something()
+  --   Foo(a,b) // comment
+  --   Bar(x,y,z)   .
+  local indent, func, argstr, trailing = line:match("^(%s*)([%w_%.:]+)%s*%((.*)%)%s*(.-)%s*$")
+
+  if not func or not argstr then
+    vim.notify("SplitArgs: current line doesn't look like a function call", vim.log.levels.INFO)
+    return
+  end
+
+  -- Split args by top-level commas
+  local function split_args_str(s)
+    local args = {}
+    local current = {}
+    local depth = 0
+
+    local function push_current()
+      local raw = table.concat(current)
+      if raw:match("%S") then
+        table.insert(args, vim.trim(raw))
+      end
+      current = {}
+    end
+
+    for i = 1, #s do
+      local c = s:sub(i, i)
+      if c == "(" or c == "[" or c == "{" then
+        depth = depth + 1
+        table.insert(current, c)
+      elseif c == ")" or c == "]" or c == "}" then
+        depth = depth - 1
+        table.insert(current, c)
+      elseif c == "," and depth == 0 then
+        push_current()
+      else
+        table.insert(current, c)
+      end
+    end
+
+    push_current()
+    return args
+  end
+
+  local args = split_args_str(argstr)
+  if #args == 0 then
+    vim.notify("SplitArgs: no args found", vim.log.levels.INFO)
+    return
+  end
+
+  local new_lines = {}
+  table.insert(new_lines, indent .. func .. "(")
+
+  local arg_indent = indent .. "    "
+
+  for _, a in ipairs(args) do
+    table.insert(new_lines, arg_indent .. a .. ",")
+  end
+
+  table.insert(new_lines, indent .. ")" .. (trailing ~= "" and " " .. trailing or ""))
+
+  local row = vim.api.nvim_win_get_cursor(0)[1] - 1
+  vim.api.nvim_buf_set_lines(0, row, row + 1, false, new_lines)
 end
 
-local function callVSCodeFunction(vsCodeCommand)
-  vim.cmd(vsCodeCommand)
+vim.keymap.set("n", "<leader>ts", split_args_line, { desc = "Split function args on current line" })
+
+-- Join lines using count, like J
+local function join_with_count(count)
+  count = count or vim.v.count1 + 1
+  vim.cmd("normal! " .. count .. "J")
 end
 
-local function vscodeMappings()
-  map("n", "<leader>cs", function()
-    print("go to symbols in editor")
-    callVSCodeFunction("call VSCodeCall('workbench.action.gotoSymbol')")
-  end, { noremap = true, silent = true, desc = "go to symbols in editor" })
-
-  map("n", "gr", function()
-    callVSCodeFunction("call VSCodeNotify('editor.action.referenceSearch.trigger')")
-  end, { noremap = true, desc = "peek references inside vs code" })
-
-  map("n", "<leader>sd", function()
-    callVSCodeFunction("call VSCodeNotify('workbench.action.problems.focus')")
-  end, { noremap = true, desc = "open problems and errors infos" })
-
-  map("n", "<leader>e", function()
-    callVSCodeFunction("call VSCodeNotify('workbench.files.action.focusFilesExplorer')")
-  end, { noremap = true, desc = "focus to file explorer" })
-
-  map("n", "<leader>fe", function()
-    callVSCodeFunction("call VSCodeNotify('workbench.files.action.focusFilesExplorer')")
-  end, { noremap = true, desc = "focus to file explorer" })
-
-  map("n", "<leader>ff", function()
-    callVSCodeFunction("call VSCodeNotify('workbench.action.quickOpen')")
-  end, { noremap = true, desc = "open files" })
-
-  -- map("n", "<leader>gg", function()
-  --   callVSCodeFunction("call VSCodeNotify('workbench.action.togglePanel')")
-  -- end, { noremap = true, desc = "open git source control" })
-
-  -- map("n", "<leader>sml", function()
-  --   callVSCodeFunction("call VSCodeNotify('bookmarks.list')")
-  -- end, { noremap = true, desc = "open bookmarks list for current files" })
-
-  -- map("n", "<leader>smL", function()
-  --   callVSCodeFunction("call VSCodeNotify('bookmarks.listFromAllFiles')")
-  -- end, { noremap = true, desc = "open bookmarks list for all files" })
-
-  -- map("n", "<leader>smm", function()
-  --   callVSCodeFunction("call VSCodeNotify('bookmarks.toggle')")
-  -- end, { noremap = true, desc = "toggle bookmarks" })
-
-  -- map("n", "<leader>smd", function()
-  --   callVSCodeFunction("call VSCodeNotify('bookmarks.clear')")
-  -- end, { noremap = true, desc = "clear bookmarks from current file" })
-
-  -- map("n", "<leader>smr", function()
-  --   callVSCodeFunction("call VSCodeNotify('bookmarks.clearFromAllFiles')")
-  -- end, { noremap = true, desc = "clear bookmarks from all file" })
-
-  map("n", "<leader>cr", function()
-    callVSCodeFunction("call VSCodeNotify('editor.action.rename')")
-  end, { noremap = true, desc = "rename symbol" })
-
-  map("n", "<leader>ca", function()
-    callVSCodeFunction("call VSCodeNotify('editor.action.quickFix')")
-  end, { noremap = true, desc = "open quick fix in vs code" })
-
-  map("n", "<leader>cA", function()
-    callVSCodeFunction("call VSCodeNotify('editor.action.sourceAction')")
-  end, { noremap = true, desc = "open source Action in vs code" })
-
-  map("n", "<leader>cp", function()
-    callVSCodeFunction("call VSCodeNotify('workbench.panel.markers.view.focus')")
-  end, { noremap = true, desc = "open problems diagnostics" })
-
-  map("n", "<leader>cd", function()
-    callVSCodeFunction("call VSCodeNotify('editor.action.marker.next')")
-  end, { noremap = true, desc = "open problems diagnostics" })
-
-  map({ "v" }, "<C-c>", function()
-    callVSCodeFunction("call VSCodeNotify('editor.action.clipboardCopyAction')")
-    print("📎added to clipboard!")
-  end, { noremap = true, desc = "copy text/add text to clipboard" })
-
-  map({ "n" }, "<u>", function()
-    callVSCodeFunction("call VSCodeNotify('undo')")
-  end, { noremap = true, desc = "undo changes" })
-
-  map({ "n" }, "<C-r>", function()
-    callVSCodeFunction("call VSCodeNotify('redo')")
-  end, { noremap = true, desc = "redo changes" })
-end
-
-if vim.g.vscode then  
-    print("⚡connected to neovim!💯‼️🤗😎")
-    vscodeMappings()
-    vim.keymap.set({ "n", "x" }, "<C-u>", function()
-        local visibleRanges = require('vscode').eval("return vscode.window.activeTextEditor.visibleRanges")
-        local height = visibleRanges[1][2].line - visibleRanges[1][1].line
-        for i = 1, height*2/3 do
-            vim.api.nvim_feedkeys("k", "n", false)
-        end
-        require('vscode').action("neovim-ui-indicator.cursorCenter")
-    end)
-    vim.keymap.set({ "n", "x" }, "<C-d>", function()
-        local visibleRanges = require('vscode').eval("return vscode.window.activeTextEditor.visibleRanges")
-        local height = visibleRanges[1][2].line - visibleRanges[1][1].line
-        for i = 1, height*2/3 do
-            vim.api.nvim_feedkeys("j", "n", false)
-        end
-        require('vscode').action("neovim-ui-indicator.cursorCenter")
-    end)
-    vim.keymap.set({ "n", "x" }, "<C-f>", function()
-        local visibleRanges = require('vscode').eval("return vscode.window.activeTextEditor.visibleRanges")
-        local height = visibleRanges[1][2].line - visibleRanges[1][1].line
-        for i = 1, height do
-            vim.api.nvim_feedkeys("j", "n", false)
-        end
-        require('vscode').action("neovim-ui-indicator.cursorCenter")
-    end)
-    vim.keymap.set({ "n", "x" }, "<C-b>", function()
-        local visibleRanges = require('vscode').eval("return vscode.window.activeTextEditor.visibleRanges")
-        local height = visibleRanges[1][2].line - visibleRanges[1][1].line
-        for i = 1, height do
-            vim.api.nvim_feedkeys("k", "n", false)
-        end
-        require('vscode').action("neovim-ui-indicator.cursorCenter")
-    end)
-else
-    vim.keymap.set({ "n", "x" }, "<C-u>", "<C-u>zz")
-    vim.keymap.set({ "n", "x" }, "<C-d>", "<C-d>zz")
-    vim.keymap.set({ "n", "x" }, "<C-f>", "<C-f>zz")
-    vim.keymap.set({ "n", "x" }, "<C-b>", "<C-b>zz")
-end
+-- Map <leader>sj as a count-aware join
+vim.keymap.set("n", "<leader>jl", function()
+  join_with_count()
+end, { desc = "Join lines with count" })
