@@ -122,3 +122,6 @@ bindkey -r '\e\[3~'
 # The next line enables shell command completion for gcloud.
 # if [ -f '/Users/michaelcao/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/michaelcao/google-cloud-sdk/completion.zsh.inc'; fi
 
+
+# Added by Antigravity
+export PATH="/Users/michael/.antigravity/antigravity/bin:$PATH"

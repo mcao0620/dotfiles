@@ -124,9 +124,13 @@
         "command": "-vscode-neovim.ctrl-f",
         "when": "editorTextFocus && neovim.ctrlKeysNormal.f && neovim.init && neovim.mode != 'insert' && editorLangId not in 'neovim.editorLangIdExclusions'"
     },
+    // {
+    //     "key": "space e",
+    //     "command": "workbench.action.toggleSidebarVisibility",
+    //     "when": "!inputFocus"
+    // },
     {
-        "key": "space e",
-        "command": "workbench.action.toggleSidebarVisibility",
-        "when": "!inputFocus"
+        "key": "cmd+i",
+        "command": "composerMode.agent"
     }
 ]

@@ -1,0 +1,79 @@
+;; Kanata configuration 
+
+(defcfg
+  process-unmapped-keys yes
+)
+
+;; Define the physical key layout (defsrc)
+;; Based on the standard Mac keyboard layout.
+;; We are only overriding the bottom 4 rows (including spacebar row).
+;;
+;; Adjust the key names below to match your actual hardware if needed.
+
+(defsrc
+  tab  q    w    e    r    t    y    u    i    o    p    [    ]    \
+  caps a    s    d    f    g    h    j    k    l    ;    '    ret
+  lsft z    x    c    v    b    n    m    ,    .    /    rsft
+  lctl lalt lmet spc  rmet ralt
+)
+
+;; Layer 0: Base layer
+;; Transforms Mac laptop layout into a split keyboard layout:
+;; - LEFT HALF: Uses Q-T (row 1), A-G (row 2), Z-B (row 3) from the left side
+;; - RIGHT HALF: Uses Y-P (row 1), H-; (row 2), N-. (row 3) from the right side
+;; - GAPS (XX): Create visual/logical separation between the two halves
+;; - DROPPED KEYS: Tab, Caps, Shift keys, and some edge keys are remapped or dropped
+;; - THUMB CLUSTER: Reconstructed from spacebar row to create ergonomic thumb access
+(deflayer base
+  ;; Row 1: Physical [tab q w e r t y u i o p [ ] \] → Virtual split layout
+  ;;         DROP  ←─── LEFT HALF ───→ ←─ GAP ─→ ←──── RIGHT HALF ────→ DROP
+  q    w    e    r    t    XX   XX   XX    y    u    i    o    p    XX
+  
+  ;; Row 2 (home row): Physical [caps a s d f g h j k l ; ' ret] → Virtual split layout
+  ;;                    DROP  ←─── LEFT HALF ───→ ←─ GAP ─→ ←─── RIGHT HALF ───→ (ret→thumb)
+  a    s    d    f    g    XX   XX   XX    h    j    k    l    ;
+  
+  ;; Row 3: Physical [lsft z x c v b n m , . / rsft] → Virtual split layout
+  ;;        DROP  ←─── LEFT HALF ───→ ←─ GAP ─→ ←RIGHT HALF→ (/ and shifts→elsewhere)
+  z    x    c    v    b    XX   XX   XX    n    m    ,    .
+  
+  ;; Thumb row: Physical [lctl lalt lmet spc rmet ralt] → Virtual thumb cluster
+  ;;            DROP DROP ←─ LEFT THUMB ─→              ←──── RIGHT THUMB ────→
+  ;;                      (tab/numbers)  (space)        (shift)(ret/symbols)
+  ;; Using tap-hold-press with long timeout: always sends tap on release unless another key is pressed
+  ;; tap-hold-press activates layer instantly on other keypress, timeout only for hold-without-use
+  XX   XX   (tap-hold-press 200 10000 tab (layer-toggle numbers)) spc  rsft (tap-hold-press 200 10000 ret (layer-toggle symbols))
+)
+
+;; Layer 1: Numbers and navigation
+;; Activated when left thumb key (tab) is held
+(deflayer numbers
+  ;; Row 1: Number keys across the top
+  1    2    3    4    5    XX   XX   XX    6    7    8    9    0    XX
+  
+  ;; Row 2: Home row mods on left side, arrow keys + backspace on right side
+  lsft lalt lctl lmet XX   XX   XX   XX    left down up   rght bspc
+  
+  ;; Row 3: All blocked/unused
+  lsft XX   XX   XX   XX   XX   XX   XX    XX   XX   XX   XX
+  
+  ;; Thumb row: Keep layer active while held
+  XX   XX   _    spc  rsft XX
+)
+
+;; Layer 2: Symbols
+;; Activated when right thumb key (ret) is held
+(deflayer symbols
+  ;; Row 1: Symbols ! < > $ % ^ & * ( )
+  S-1  S-,  S-.  S-4  S-5  XX   XX   XX    S-6  S-7  S-8  S-9  S-0  XX
+  
+  ;; Row 2: Left symbols and right modifiers (5 + 3 gap + 5 = 13)
+  ;;      !    -    +    =    #                          
+  S-1  -    S-=  =    S-3  XX   XX   XX    grv  rmet rctl ralt rsft
+  
+  ;; Row 3: More symbols / * \ ~ and brackets [ { } ] |
+  lsft XX   /    S-8  \    S-grv XX    [    S-[  S-]  ]    S-\
+  
+  ;; Thumb row: Keep layer active while held
+  XX   XX   XX   spc  rsft _
+)
