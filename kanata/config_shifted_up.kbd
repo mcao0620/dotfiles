@@ -72,7 +72,7 @@
   ;; Row 0 (13 keys): Function row transparent
   _    _    _    _    _    _    _    _    _    _    _    _    _
   ;; Row 1 (14 keys): Symbols ! < > $ % ^ & * ( )
-  XX   S-1  S-,  S-.  S-4  S-5  XX   XX   S-6  S-7  S-8  S-9  S-0  XX
+  XX   S-\  S-,  S-.  S-4  S-5  XX   XX   S-6  S-7  S-8  S-9  S-0  XX
   
   ;; Row 2 (14 keys): Left symbols and right modifiers with grave at end
   ;;                   !    -    +    =                 right mods    grv
