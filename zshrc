@@ -125,3 +125,7 @@ bindkey -r '\e\[3~'
 
 # Added by Antigravity
 export PATH="/Users/michael/.antigravity/antigravity/bin:$PATH"
+
+# For bob neovim package manager
+export PATH="$PATH:/Users/michael/.local/bin"
+export PATH="$HOME/.local/share/bob/nvim-bin:$PATH"
