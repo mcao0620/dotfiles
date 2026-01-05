@@ -8,6 +8,7 @@ vim.keymap.set({ "n", "v", "i", "t" }, "<C-l>", "<Cmd>TmuxNavigateRight<CR>", { 
 
 vim.keymap.set("n", "<C-u>", "<C-u>zz")
 vim.keymap.set("n", "<C-d>", "<C-d>zz")
+vim.keymap.set("n", "<leader>ww", "<CMD>:w!<CR>")
 vim.keymap.set("n", "<A-j>", "")
 vim.keymap.set("n", "<A-k>", "")
 vim.keymap.set("n", "<S-j>", "")

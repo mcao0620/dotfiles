@@ -3,6 +3,11 @@ return {
   event = "VimEnter",
   dependencies = { "folke/snacks.nvim" },
   config = true,
+  opts = {
+    terminal = {
+      provider = "none",
+    },
+  },
   keys = {
     { "<leader>a", nil, desc = "AI/Claude Code" },
     { "<leader>ac", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },

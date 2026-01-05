@@ -5,6 +5,7 @@ local state = {
     buf = -1,
     win = -1,
   },
+  augroup = nil,
 }
 
 local function create_floating_window(opts)
@@ -40,18 +41,70 @@ local function create_floating_window(opts)
   return { buf = buf, win = win }
 end
 
+local function clear_focus_autocmd()
+  if state.augroup then
+    vim.api.nvim_del_augroup_by_id(state.augroup)
+    state.augroup = nil
+  end
+end
+
+local function setup_tmux_navigation_keymaps(buf)
+  if not vim.env.TMUX then
+    return
+  end
+
+  local tmux_directions = {
+    ["<C-h>"] = "L",
+    ["<C-j>"] = "D",
+    ["<C-k>"] = "U",
+    ["<C-l>"] = "R",
+  }
+
+  for key, direction in pairs(tmux_directions) do
+    vim.keymap.set("t", key, function()
+      vim.fn.system("tmux select-pane -" .. direction)
+    end, { buffer = buf, desc = "Navigate to tmux pane" })
+  end
+end
+
+local function setup_focus_autocmd()
+  if state.augroup then
+    return
+  end
+
+  state.augroup = vim.api.nvim_create_augroup("FloatingLazygitFocus", { clear = true })
+
+  vim.api.nvim_create_autocmd("FocusGained", {
+    group = state.augroup,
+    callback = function()
+      if vim.api.nvim_win_is_valid(state.floating.win) then
+        vim.api.nvim_set_current_win(state.floating.win)
+        vim.cmd.startinsert()
+      end
+    end,
+  })
+
+  vim.api.nvim_create_autocmd("WinClosed", {
+    group = state.augroup,
+    callback = function(args)
+      if tonumber(args.match) == state.floating.win then
+        clear_focus_autocmd()
+      end
+    end,
+  })
+end
+
 local function toggle_lazygit()
   if not vim.api.nvim_win_is_valid(state.floating.win) then
     state.floating = create_floating_window({ buf = state.floating.buf })
     if vim.bo[state.floating.buf].buftype ~= "terminal" then
-      vim.fn.termopen("lazygit")
+      vim.fn.jobstart("lazygit", { term = true })
+      setup_tmux_navigation_keymaps(state.floating.buf)
     end
-    -- Set buffer-local keymap to hide terminal with "q" in terminal mode
-    -- vim.keymap.set("t", "q", function()
-    --   vim.api.nvim_win_hide(state.floating.win)
-    -- end, { buffer = state.floating.buf, desc = "Hide floating lazygit" })
+    setup_focus_autocmd()
     vim.cmd.startinsert()
   else
+    clear_focus_autocmd()
     vim.api.nvim_win_hide(state.floating.win)
   end
 end
