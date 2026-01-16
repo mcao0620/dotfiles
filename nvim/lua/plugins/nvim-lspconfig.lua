@@ -20,10 +20,12 @@ return {
               rangeVariableTypes = false,
             },
             directoryFilters = {
+              "-.bazel",
               "-bazel-bin",
               "-bazel-out",
               "-bazel-testlogs",
               "-bazel-LOMP",
+              "-bazel-com_github_askscio_scio",
             },
           },
         },

@@ -10,7 +10,7 @@ keybind = global:cmd+ctrl+i=toggle_quick_terminal
 keybind = cmd+r=reload_config
 keybind = shift+enter=text:\x1b\r
 
-custom-shader = ~/dev/dotfiles/ghostty/cursor_blaze.glsl
+# custom-shader = ~/dev/dotfiles/ghostty/cursor_blaze.glsl
 # custom-shader = ~/dev/dotfiles/ghostty/starfield-colors.glsl
 # custom-shader = ~/dev/dotfiles/ghostty/just-snow.glsl
 # custom-shader = ~/dev/dotfiles/ghostty/drunkard.glsl

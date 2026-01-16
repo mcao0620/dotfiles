@@ -67,6 +67,25 @@ local function setup_tmux_navigation_keymaps(buf)
   end
 end
 
+local function resize_floating_window()
+  if not vim.api.nvim_win_is_valid(state.floating.win) then
+    return
+  end
+
+  local width = math.floor(vim.o.columns * 0.9)
+  local height = math.floor(vim.o.lines * 0.9)
+  local col = math.floor((vim.o.columns - width) / 2)
+  local row = math.floor((vim.o.lines - height) / 2)
+
+  vim.api.nvim_win_set_config(state.floating.win, {
+    relative = "editor",
+    width = width,
+    height = height,
+    col = col,
+    row = row,
+  })
+end
+
 local function setup_focus_autocmd()
   if state.augroup then
     return
@@ -91,6 +110,11 @@ local function setup_focus_autocmd()
         clear_focus_autocmd()
       end
     end,
+  })
+
+  vim.api.nvim_create_autocmd("VimResized", {
+    group = state.augroup,
+    callback = resize_floating_window,
   })
 end
 
