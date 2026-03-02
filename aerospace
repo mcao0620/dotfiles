@@ -88,9 +88,9 @@ run = "move-node-to-workspace D" # Home row key
 if.app-id = 'com.figma.Desktop'
 run = "move-node-to-workspace F" # Figma
 
-[[on-window-detected]]
-if.app-id = 'com.glean.desktop'
-run = "move-node-to-workspace G" # Glean
+# [[on-window-detected]]
+# if.app-id = 'com.glean.desktop'
+# run = "move-node-to-workspace G" # Glean
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'

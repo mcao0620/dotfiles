@@ -9,6 +9,8 @@ return {
             ["build.buildFlags"] = { "-tags=bazel" },
             env = {
               GOPACKAGESDRIVER = vim.fn.fnamemodify("./tools/gopackagesdriver.sh", ":p"),
+              -- GOPACKAGESPRINTDRIVERERRORS = "1",
+              -- GOPACKAGESDRIVER_BAZEL_BUILD_FLAGS = "-c dbg",
             },
             hints = {
               assignVariableTypes = false,
