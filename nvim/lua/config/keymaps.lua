@@ -104,3 +104,16 @@ end
 vim.keymap.set("n", "<leader>jl", function()
   join_with_count()
 end, { desc = "Join lines with count" })
+
+vim.keymap.set("n", "<leader>o", function()
+  local file = vim.fn.expand("%:p")
+  if file == "" then
+    vim.notify("No file to open", vim.log.levels.WARN)
+    return
+  end
+  local filename = vim.fn.fnamemodify(file, ":t")
+  local vault = vim.fn.expand("~/Documents/Obsidian Vault")
+  local dest = vault .. "/" .. filename
+  vim.fn.system({ "cp", file, dest })
+  vim.fn.system({ "open", "obsidian://open?vault=Obsidian Vault&file=" .. vim.uri_encode(filename) })
+end, { desc = "Copy file to Obsidian vault and open" })
