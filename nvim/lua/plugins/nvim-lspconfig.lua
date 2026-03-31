@@ -2,6 +2,7 @@ return {
   "neovim/nvim-lspconfig",
   opts = {
     servers = {
+      basedpyright = {},
       gopls = {
         settings = {
           gopls = {
