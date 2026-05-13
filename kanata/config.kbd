@@ -84,7 +84,7 @@
   
   ;; Row 2 (14 keys): Left symbols and right modifiers with grave at end
   ;;                   !    -    +    =                 right mods    grv
-  (tap-hold-press 200 200 esc lctl)  S-1  -    S-=  =    S-3   XX   XX   XX   rmet rctl ralt rsft grv
+  (tap-hold-press 200 200 esc lctl)  S-1  -    S-=  =    S-3   XX   XX   XX   rmet rctl lalt lsft grv
   
   ;; Row 3 (13 keys): Shift + symbols / * \ ~ and brackets [ { } ] |
   lsft XX   /    S-8  \    S-grv XX  XX   XX [    S-[  S-]  ]

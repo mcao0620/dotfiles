@@ -12,7 +12,28 @@ after-login-command = []
 # You can use it to add commands that run after AeroSpace startup.
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = []
+after-startup-command = ['''exec-and-forget
+  open -a Ghostty
+  open -a Cursor
+  open -a GoLand
+  open -a Arc
+  open -a Slack
+  open -a Messages
+  open -a Figma
+  open -a Spotify
+  open -a Obsidian
+  sleep 5
+  move() { aerospace list-windows --app-id "$1" | awk "{print \$1}" | while read -r wid; do aerospace move-node-to-workspace --window-id "$wid" "$2"; done; }
+  move com.mitchellh.ghostty F
+  move com.todesktop.230313mzl4w4u92 F
+  move com.jetbrains.goland F
+  move company.thebrowser.Browser A
+  move com.tinyspeck.slackmacgap S
+  move com.apple.MobileSMS D
+  move com.figma.Desktop F
+  move com.spotify.client M
+  move md.obsidian O
+''']
 
 # Start AeroSpace at login
 start-at-login = true
@@ -60,46 +81,6 @@ outer.bottom =     10
 outer.top =        10
 outer.right =      10
 
-[[on-window-detected]]
-if.app-id = 'com.mitchellh.ghostty'
-run = "move-node-to-workspace I" # IDE
-
-[[on-window-detected]]
-if.app-id = 'com.todesktop.230313mzl4w4u92'
-run = "move-node-to-workspace I" # IDE
-
-[[on-window-detected]]
-if.app-id = 'com.jetbrains.goland'
-run = "move-node-to-workspace I" # IDE
-
-[[on-window-detected]]
-if.app-id = 'company.thebrowser.Browser'
-run = "move-node-to-workspace A" # Arc
-
-[[on-window-detected]]
-if.app-id = 'com.tinyspeck.slackmacgap'
-run = "move-node-to-workspace S" # Slack
-
-[[on-window-detected]]
-if.app-id = 'com.apple.MobileSMS'
-run = "move-node-to-workspace D" # Home row key
-
-[[on-window-detected]]
-if.app-id = 'com.figma.Desktop'
-run = "move-node-to-workspace F" # Figma
-
-# [[on-window-detected]]
-# if.app-id = 'com.glean.desktop'
-# run = "move-node-to-workspace G" # Glean
-
-[[on-window-detected]]
-if.app-id = 'com.spotify.client'
-run = "move-node-to-workspace M" # Music
-
-[[on-window-detected]]
-if.app-id = 'md.obsidian'
-run = "move-node-to-workspace O" # Obsidian
-
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -123,11 +104,60 @@ run = "move-node-to-workspace O" # Obsidian
 
 # You can uncomment this line to open up terminal with alt + enter shortcut
 # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-# alt-enter = 'exec-and-forget open -n /System/Applications/Utilities/Terminal.app'
+alt-enter = '''exec-and-forget
+  exec > /tmp/aerospace-littlearc.log 2>&1
+  set -x
+  ws=$(aerospace list-workspaces --focused)
+  before=$(aerospace list-windows --monitor all --app-id company.thebrowser.Browser --format "%{window-id}" | sort)
+  open -a Arc "arc://newtab"
+  sleep 1
+  after=$(aerospace list-windows --monitor all --app-id company.thebrowser.Browser --format "%{window-id}" | sort)
+  wid=$(echo "$before"$'\n'"$after" | sort | uniq -u | head -1)
+  echo "before: $before"
+  echo "after: $after"
+  echo "new wid: $wid"
+  echo "target ws: $ws"
+  if [ -n "$wid" ]; then
+    aerospace move-node-to-workspace --window-id "$wid" "$ws"
+    aerospace workspace "$ws"
+    aerospace focus --window-id "$wid"
+  fi
+'''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
+alt-period = '''exec-and-forget
+  focused=$(aerospace list-windows --focused --format "%{window-id}")
+  ws=$(aerospace list-workspaces --focused)
+
+  aerospace flatten-workspace-tree
+  aerospace layout h_tiles
+
+  all=$(aerospace list-windows --workspace focused --format "%{window-id}")
+  count=$(echo "$all" | wc -l | tr -d " ")
+  [ "$count" -lt 2 ] && exit 0
+
+  # Remove master so remaining windows are all adjacent
+  aerospace move-node-to-workspace --window-id "$focused" MSTACK
+
+  # Join remaining windows into a vertical stack
+  remaining=$(aerospace list-windows --workspace "$ws" --format "%{window-id}")
+  prev=""
+  for wid in $remaining; do
+    if [ -n "$prev" ]; then
+      aerospace focus --window-id "$wid"
+      aerospace join-with left
+    fi
+    prev="$wid"
+  done
+
+  # Bring master back and put it on the left
+  aerospace move-node-to-workspace --window-id "$focused" "$ws"
+  aerospace workspace "$ws"
+  aerospace focus --window-id "$focused"
+  aerospace move left
+'''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-h = 'focus left'

@@ -160,5 +160,5 @@
   {
     "key": "cmd+y",
     "command": "-aichat.newfollowupaction"
-  },
+  }
 ]

@@ -105,6 +105,12 @@ vim.keymap.set("n", "<leader>jl", function()
   join_with_count()
 end, { desc = "Join lines with count" })
 
+vim.keymap.set("n", "<leader>yp", function()
+  local path = vim.fn.expand("%")
+  vim.fn.setreg("+", path)
+  vim.notify(path, vim.log.levels.INFO)
+end, { desc = "Yank relative file path" })
+
 vim.keymap.set("n", "<leader>o", function()
   local file = vim.fn.expand("%:p")
   if file == "" then
