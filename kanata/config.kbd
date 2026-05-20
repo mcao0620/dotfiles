@@ -47,7 +47,7 @@
   
   ;; Row 4 (12 keys): Thumb cluster moved here - c/v positions (left) and m/comma positions (right)
   ;;                   3 XX + 2 thumb(left) + 2 gap + 2 thumb(right) + 3 XX
-  XX   XX   XX   (tap-hold-press 200 10000 tab (layer-toggle numbers)) spc  XX   XX   rsft (tap-hold-press 200 10000 ret (layer-toggle symbols)) XX   XX   XX
+  XX   XX   XX   (tap-hold-press 200 10000 tab (layer-toggle numbers)) spc  XX   XX   (tap-hold-press 200 200 f18 rsft) (tap-hold-press 200 10000 ret (layer-toggle symbols)) XX   XX   XX
   
   ;; Row 5 (6 keys): All cleared - thumb cluster moved to row 4
   XX   XX   XX   XX   XX   XX

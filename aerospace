@@ -104,59 +104,80 @@ outer.right =      10
 
 # You can uncomment this line to open up terminal with alt + enter shortcut
 # See: https://nikitabobko.github.io/AeroSpace/commands#exec-and-forget
-alt-enter = '''exec-and-forget
-  exec > /tmp/aerospace-littlearc.log 2>&1
-  set -x
-  ws=$(aerospace list-workspaces --focused)
-  before=$(aerospace list-windows --monitor all --app-id company.thebrowser.Browser --format "%{window-id}" | sort)
-  open -a Arc "arc://newtab"
-  sleep 1
-  after=$(aerospace list-windows --monitor all --app-id company.thebrowser.Browser --format "%{window-id}" | sort)
-  wid=$(echo "$before"$'\n'"$after" | sort | uniq -u | head -1)
-  echo "before: $before"
-  echo "after: $after"
-  echo "new wid: $wid"
-  echo "target ws: $ws"
-  if [ -n "$wid" ]; then
-    aerospace move-node-to-workspace --window-id "$wid" "$ws"
-    aerospace workspace "$ws"
-    aerospace focus --window-id "$wid"
-  fi
-'''
+alt-space = 'fullscreen'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
+# Master-stack layout: focused window becomes master (left), rest stack vertically (right)
+# Inspired by https://github.com/CarterMcAlister/aerospace-layout-manager
+#
+# AeroSpace has no built-in master-stack layout and `move left/right` wraps at boundaries,
+# so there's no reliable way to position a window at the edge of a flat container.
+# Instead, we stash the master window in a temp workspace, join the remaining windows
+# into a vertical stack (they're guaranteed adjacent with master gone), then bring
+# master back. The single `move left` at the end is safe because the root only has
+# two nodes: master and the stack container.
+# Small delays between commands give AeroSpace time to process tree mutations.
 alt-period = '''exec-and-forget
   focused=$(aerospace list-windows --focused --format "%{window-id}")
   ws=$(aerospace list-workspaces --focused)
 
   aerospace flatten-workspace-tree
-  aerospace layout h_tiles
+  sleep 0.1
 
   all=$(aerospace list-windows --workspace focused --format "%{window-id}")
   count=$(echo "$all" | wc -l | tr -d " ")
   [ "$count" -lt 2 ] && exit 0
 
-  # Remove master so remaining windows are all adjacent
-  aerospace move-node-to-workspace --window-id "$focused" MSTACK
+  # Move ALL windows to temp workspace
+  for wid in $all; do
+    aerospace move-node-to-workspace --window-id "$wid" MSTACK
+    sleep 0.05
+  done
+  sleep 0.1
 
-  # Join remaining windows into a vertical stack
-  remaining=$(aerospace list-windows --workspace "$ws" --format "%{window-id}")
-  prev=""
-  for wid in $remaining; do
-    if [ -n "$prev" ]; then
-      aerospace focus --window-id "$wid"
+  # Bring master back first — guarantees it is leftmost
+  aerospace move-node-to-workspace --window-id "$focused" "$ws"
+  sleep 0.1
+  aerospace focus --window-id "$focused"
+  sleep 0.05
+
+  # Bring others back one at a time, joining into vertical stack as they arrive
+  i=0
+  for wid in $all; do
+    [ "$wid" = "$focused" ] && continue
+    aerospace move-node-to-workspace --window-id "$wid" "$ws"
+    sleep 0.1
+    aerospace focus --window-id "$wid"
+    sleep 0.05
+    i=$((i + 1))
+    if [ "$i" -eq 2 ]; then
+      # First join: creates the stack container
       aerospace join-with left
+      sleep 0.1
+      aerospace layout v_tiles
+      sleep 0.1
+    elif [ "$i" -ge 3 ]; then
+      # Subsequent: move INTO the existing container (avoids nested same-orientation)
+      aerospace move left
+      sleep 0.1
     fi
-    prev="$wid"
   done
 
-  # Bring master back and put it on the left
-  aerospace move-node-to-workspace --window-id "$focused" "$ws"
-  aerospace workspace "$ws"
   aerospace focus --window-id "$focused"
-  aerospace move left
+
+  # Uncomment to debug layout issues:
+  # LOG="/tmp/aerospace-mstack.log"
+  # echo "=== $(date) ===" > "$LOG"
+  # dump_tree() {
+  #   aerospace list-windows --workspace "$ws" --format "%{window-id} %{app-name}" >> "$LOG" 2>&1
+  #   for w in $(aerospace list-windows --workspace "$ws" --format "%{window-id}"); do
+  #     echo "  debug wid=$w:" >> "$LOG"
+  #     aerospace debug-windows --window-id "$w" >> "$LOG" 2>&1
+  #   done
+  # }
+  # dump_tree
 '''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus

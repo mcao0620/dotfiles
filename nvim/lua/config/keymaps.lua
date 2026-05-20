@@ -111,6 +111,19 @@ vim.keymap.set("n", "<leader>yp", function()
   vim.notify(path, vim.log.levels.INFO)
 end, { desc = "Yank relative file path" })
 
+vim.keymap.set("n", "<leader>mg", function()
+  local clients = vim.lsp.get_clients({ name = "gopls" })
+  if #clients > 0 then
+    for _, client in ipairs(clients) do
+      vim.lsp.stop_client(client.id)
+    end
+    vim.notify("gopls stopped", vim.log.levels.INFO)
+  else
+    vim.cmd("LspStart gopls")
+    vim.notify("gopls started", vim.log.levels.INFO)
+  end
+end, { desc = "Toggle gopls" })
+
 vim.keymap.set("n", "<leader>o", function()
   local file = vim.fn.expand("%:p")
   if file == "" then

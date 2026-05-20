@@ -4,6 +4,7 @@ return {
     servers = {
       basedpyright = {},
       gopls = {
+        autostart = false,
         settings = {
           gopls = {
             -- Enable Bazel support
