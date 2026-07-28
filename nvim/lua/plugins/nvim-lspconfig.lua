@@ -4,7 +4,6 @@ return {
     servers = {
       basedpyright = {},
       gopls = {
-        autostart = false,
         settings = {
           gopls = {
             -- Enable Bazel support
@@ -64,6 +63,13 @@ return {
           client.server_capabilities.documentRangeFormattingProvider = false
         end,
       },
+    },
+    setup = {
+      gopls = function(_, opts)
+        vim.lsp.config("gopls", opts)
+        vim.lsp.enable("gopls", false)
+        return true
+      end,
     },
   },
 }

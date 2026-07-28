@@ -12,28 +12,7 @@ after-login-command = []
 # You can use it to add commands that run after AeroSpace startup.
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
-after-startup-command = ['''exec-and-forget
-  open -a Ghostty
-  open -a Cursor
-  open -a GoLand
-  open -a Arc
-  open -a Slack
-  open -a Messages
-  open -a Figma
-  open -a Spotify
-  open -a Obsidian
-  sleep 5
-  move() { aerospace list-windows --app-id "$1" | awk "{print \$1}" | while read -r wid; do aerospace move-node-to-workspace --window-id "$wid" "$2"; done; }
-  move com.mitchellh.ghostty F
-  move com.todesktop.230313mzl4w4u92 F
-  move com.jetbrains.goland F
-  move company.thebrowser.Browser A
-  move com.tinyspeck.slackmacgap S
-  move com.apple.MobileSMS D
-  move com.figma.Desktop F
-  move com.spotify.client M
-  move md.obsidian O
-''']
+after-startup-command = ['exec-and-forget borders active_color=0xffe1e3e4 inactive_color=0xff494d64 width=3.0']
 
 # Start AeroSpace at login
 start-at-login = true
@@ -109,7 +88,95 @@ alt-space = 'fullscreen'
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 alt-slash = 'layout tiles horizontal vertical'
 alt-comma = 'layout accordion horizontal vertical'
-# Master-stack layout: focused window becomes master (left), rest stack vertically (right)
+# Four-slot tiled layout: first four windows become a 2x2 grid; extras group with slot 4.
+alt-period = '''exec-and-forget
+  focused=$(aerospace list-windows --focused --format "%{window-id}")
+  ws=$(aerospace list-workspaces --focused)
+
+  all=$(aerospace list-windows --workspace focused --format "%{window-id}")
+  count=$(echo "$all" | wc -l | tr -d " ")
+  [ "$count" -lt 2 ] && exit 0
+
+  set -- $all
+  w1=$1
+  w2=$2
+  w3=$3
+  w4=$4
+  extras=""
+  if [ "$count" -gt 4 ]; then
+    shift 4
+    extras="$*"
+  fi
+
+  temp_ws="SQUARE-$ws"
+
+  move_back() {
+    aerospace move-node-to-workspace --window-id "$1" "$ws"
+    sleep 0.1
+    aerospace focus --window-id "$1"
+    sleep 0.05
+  }
+
+  finish() {
+    aerospace balance-sizes
+    aerospace focus --window-id "$focused"
+  }
+
+  for wid in $all; do
+    aerospace move-node-to-workspace --window-id "$wid" "$temp_ws"
+    sleep 0.05
+  done
+  sleep 0.1
+
+  move_back "$w1"
+  aerospace layout h_tiles
+
+  move_back "$w2"
+  aerospace layout h_tiles
+
+  if [ "$count" -lt 3 ]; then
+    finish
+    exit 0
+  fi
+
+  move_back "$w3"
+  aerospace layout h_tiles
+  sleep 0.05
+  aerospace move left
+  sleep 0.1
+  aerospace join-with left
+  sleep 0.1
+  aerospace layout v_tiles
+
+  if [ "$count" -lt 4 ]; then
+    finish
+    exit 0
+  fi
+
+  aerospace focus --window-id "$w2"
+  sleep 0.05
+  move_back "$w4"
+  aerospace layout h_tiles
+  sleep 0.05
+  aerospace join-with left
+  sleep 0.1
+  aerospace layout v_tiles
+
+  for wid in $extras; do
+    aerospace focus --window-id "$w4"
+    sleep 0.05
+    move_back "$wid"
+    aerospace move left
+    sleep 0.1
+    aerospace join-with up
+    sleep 0.1
+    aerospace layout accordion
+    sleep 0.05
+  done
+
+  finish
+'''
+# Old master-stack layout: focused window becomes master (left), rest stack vertically (right)
 # Inspired by https://github.com/CarterMcAlister/aerospace-layout-manager
 #
 # AeroSpace has no built-in master-stack layout and `move left/right` wraps at boundaries,
@@ -119,66 +186,66 @@ alt-comma = 'layout accordion horizontal vertical'
 # master back. The single `move left` at the end is safe because the root only has
 # two nodes: master and the stack container.
 # Small delays between commands give AeroSpace time to process tree mutations.
-alt-period = '''exec-and-forget
-  focused=$(aerospace list-windows --focused --format "%{window-id}")
-  ws=$(aerospace list-workspaces --focused)
-
-  aerospace flatten-workspace-tree
-  sleep 0.1
-
-  all=$(aerospace list-windows --workspace focused --format "%{window-id}")
-  count=$(echo "$all" | wc -l | tr -d " ")
-  [ "$count" -lt 2 ] && exit 0
-
-  # Move ALL windows to temp workspace
-  for wid in $all; do
-    aerospace move-node-to-workspace --window-id "$wid" MSTACK
-    sleep 0.05
-  done
-  sleep 0.1
-
-  # Bring master back first — guarantees it is leftmost
-  aerospace move-node-to-workspace --window-id "$focused" "$ws"
-  sleep 0.1
-  aerospace focus --window-id "$focused"
-  sleep 0.05
-
-  # Bring others back one at a time, joining into vertical stack as they arrive
-  i=0
-  for wid in $all; do
-    [ "$wid" = "$focused" ] && continue
-    aerospace move-node-to-workspace --window-id "$wid" "$ws"
-    sleep 0.1
-    aerospace focus --window-id "$wid"
-    sleep 0.05
-    i=$((i + 1))
-    if [ "$i" -eq 2 ]; then
-      # First join: creates the stack container
-      aerospace join-with left
-      sleep 0.1
-      aerospace layout v_tiles
-      sleep 0.1
-    elif [ "$i" -ge 3 ]; then
-      # Subsequent: move INTO the existing container (avoids nested same-orientation)
-      aerospace move left
-      sleep 0.1
-    fi
-  done
-
-  aerospace focus --window-id "$focused"
-
-  # Uncomment to debug layout issues:
-  # LOG="/tmp/aerospace-mstack.log"
-  # echo "=== $(date) ===" > "$LOG"
-  # dump_tree() {
-  #   aerospace list-windows --workspace "$ws" --format "%{window-id} %{app-name}" >> "$LOG" 2>&1
-  #   for w in $(aerospace list-windows --workspace "$ws" --format "%{window-id}"); do
-  #     echo "  debug wid=$w:" >> "$LOG"
-  #     aerospace debug-windows --window-id "$w" >> "$LOG" 2>&1
-  #   done
-  # }
-  # dump_tree
-'''
+# alt-period = '''exec-and-forget
+#   focused=$(aerospace list-windows --focused --format "%{window-id}")
+#   ws=$(aerospace list-workspaces --focused)
+#
+#   aerospace flatten-workspace-tree
+#   sleep 0.1
+#
+#   all=$(aerospace list-windows --workspace focused --format "%{window-id}")
+#   count=$(echo "$all" | wc -l | tr -d " ")
+#   [ "$count" -lt 2 ] && exit 0
+#
+#   # Move ALL windows to temp workspace
+#   for wid in $all; do
+#     aerospace move-node-to-workspace --window-id "$wid" MSTACK
+#     sleep 0.05
+#   done
+#   sleep 0.1
+#
+#   # Bring master back first — guarantees it is leftmost
+#   aerospace move-node-to-workspace --window-id "$focused" "$ws"
+#   sleep 0.1
+#   aerospace focus --window-id "$focused"
+#   sleep 0.05
+#
+#   # Bring others back one at a time, joining into vertical stack as they arrive
+#   i=0
+#   for wid in $all; do
+#     [ "$wid" = "$focused" ] && continue
+#     aerospace move-node-to-workspace --window-id "$wid" "$ws"
+#     sleep 0.1
+#     aerospace focus --window-id "$wid"
+#     sleep 0.05
+#     i=$((i + 1))
+#     if [ "$i" -eq 2 ]; then
+#       # First join: creates the stack container
+#       aerospace join-with left
+#       sleep 0.1
+#       aerospace layout v_tiles
+#       sleep 0.1
+#     elif [ "$i" -ge 3 ]; then
+#       # Subsequent: move INTO the existing container (avoids nested same-orientation)
+#       aerospace move left
+#       sleep 0.1
+#     fi
+#   done
+#
+#   aerospace focus --window-id "$focused"
+#
+#   # Uncomment to debug layout issues:
+#   # LOG="/tmp/aerospace-mstack.log"
+#   # echo "=== $(date) ===" > "$LOG"
+#   # dump_tree() {
+#   #   aerospace list-windows --workspace "$ws" --format "%{window-id} %{app-name}" >> "$LOG" 2>&1
+#   #   for w in $(aerospace list-windows --workspace "$ws" --format "%{window-id}"); do
+#   #     echo "  debug wid=$w:" >> "$LOG"
+#   #     aerospace debug-windows --window-id "$w" >> "$LOG" 2>&1
+#   #   done
+#   # }
+#   # dump_tree
+# '''
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-h = 'focus left'
@@ -283,3 +350,39 @@ alt-shift-h = ['join-with left', 'mode main']
 alt-shift-j = ['join-with down', 'mode main']
 alt-shift-k = ['join-with up', 'mode main']
 alt-shift-l = ['join-with right', 'mode main']
+
+[[on-window-detected]]
+if.app-id = 'com.mitchellh.ghostty'
+run = 'move-node-to-workspace F'
+
+[[on-window-detected]]
+if.app-id = 'com.todesktop.230313mzl4w4u92'
+run = 'move-node-to-workspace F'
+
+[[on-window-detected]]
+if.app-id = 'com.jetbrains.goland'
+run = 'move-node-to-workspace F'
+
+[[on-window-detected]]
+if.app-id = 'company.thebrowser.Browser'
+run = 'move-node-to-workspace A'
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace S'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.MobileSMS'
+run = 'move-node-to-workspace D'
+
+[[on-window-detected]]
+if.app-id = 'com.figma.Desktop'
+run = 'move-node-to-workspace F'
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = 'move-node-to-workspace M'
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = 'move-node-to-workspace O'
